@@ -4,9 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Domain", "Timenote
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Tests", "Timenote.Tests\Timenote.Tests.csproj", "{6834EA00-31D7-4DEC-A77D-C8CFF809AD32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Infrastructure", "Timenote.Infrastructure\Timenote.Infrastructure.csproj", "{81FF8610-8A4F-4690-AA86-F3AF19F9723B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Persistence", "Timenote.Persistence\Timenote.Persistence.csproj", "{81FF8610-8A4F-4690-AA86-F3AF19F9723B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Api", "Timenote.Api\Timenote.Api.csproj", "{01216F91-1C8A-49D7-9C17-DFFFF4236870}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Core", "Timenote.Core\Timenote.Core.csproj", "{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +32,9 @@ Global
 		{01216F91-1C8A-49D7-9C17-DFFFF4236870}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01216F91-1C8A-49D7-9C17-DFFFF4236870}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01216F91-1C8A-49D7-9C17-DFFFF4236870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
