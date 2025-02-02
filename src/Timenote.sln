@@ -1,8 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Domain", "Timenote.Domain\Timenote.Domain.csproj", "{DDBA7F95-3EDD-49A0-9F73-416BF4D5CB29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Tests", "Timenote.Tests\Timenote.Tests.csproj", "{6834EA00-31D7-4DEC-A77D-C8CFF809AD32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Infrastructure", "Timenote.Infrastructure\Timenote.Infrastructure.csproj", "{81FF8610-8A4F-4690-AA86-F3AF19F9723B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Api", "Timenote.Api\Timenote.Api.csproj", "{01216F91-1C8A-49D7-9C17-DFFFF4236870}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDBA7F95-3EDD-49A0-9F73-416BF4D5CB29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDBA7F95-3EDD-49A0-9F73-416BF4D5CB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDBA7F95-3EDD-49A0-9F73-416BF4D5CB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDBA7F95-3EDD-49A0-9F73-416BF4D5CB29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6834EA00-31D7-4DEC-A77D-C8CFF809AD32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6834EA00-31D7-4DEC-A77D-C8CFF809AD32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6834EA00-31D7-4DEC-A77D-C8CFF809AD32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6834EA00-31D7-4DEC-A77D-C8CFF809AD32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FF8610-8A4F-4690-AA86-F3AF19F9723B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FF8610-8A4F-4690-AA86-F3AF19F9723B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FF8610-8A4F-4690-AA86-F3AF19F9723B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FF8610-8A4F-4690-AA86-F3AF19F9723B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01216F91-1C8A-49D7-9C17-DFFFF4236870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01216F91-1C8A-49D7-9C17-DFFFF4236870}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01216F91-1C8A-49D7-9C17-DFFFF4236870}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01216F91-1C8A-49D7-9C17-DFFFF4236870}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
