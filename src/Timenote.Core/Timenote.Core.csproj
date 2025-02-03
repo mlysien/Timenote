@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Timenote.Domain\Timenote.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

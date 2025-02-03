@@ -25,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Timenote.Core\Timenote.Core.csproj" />
       <ProjectReference Include="..\Timenote.Domain\Timenote.Domain.csproj" />
     </ItemGroup>
 
