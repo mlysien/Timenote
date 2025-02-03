@@ -20,4 +20,12 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="WorklogTests\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Timenote.Domain\Timenote.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
