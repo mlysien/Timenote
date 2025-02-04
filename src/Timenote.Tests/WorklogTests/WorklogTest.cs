@@ -1,6 +1,7 @@
 ﻿using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
+using Timenote.Domain.Exceptions;
 
 namespace Timenote.Tests.WorklogTests;
 
@@ -91,5 +92,21 @@ public class WorklogTest
         
          Assert.That(loggedTime, Is.EqualTo(expectedLoggedTime));
     } 
+
+    [Test, Description("Worklog should throw exception when entry end time is earlier than start time")]
+    public void WorklogStartTimeCannotBeGreaterThanEndTime()
+    {
+        // arrange
+        var startTime = new DateTime(2025, 01, 01, 15, 00, 00);
+        var endTime = new DateTime(2025, 01, 01, 08, 00, 00);
+        var entry = new Entry()
+        {
+            StartTime = startTime,
+            EndTime = endTime,
+        };
+        
+        // act & assert
+        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));
+    }
 
 }

@@ -1,5 +1,6 @@
 ﻿using Timenote.Core.Services.Abstractions;
 using Timenote.Domain.Entities;
+using Timenote.Domain.Exceptions;
 
 namespace Timenote.Core.Services.Implementations;
 
@@ -9,6 +10,11 @@ public class WorklogService : IWorklogService
 
     public void AddEntry(Entry entry)
     {
+        if (entry.StartTime >= entry.EndTime)
+        {
+            throw new InvalidWorklogEntryException("StartTime can't be greater than EndTime");
+        }
+        
         _worklog.Entries.Add(entry);
     }
 
