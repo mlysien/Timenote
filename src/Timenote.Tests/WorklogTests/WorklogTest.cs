@@ -109,4 +109,21 @@ public class WorklogTest
         Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));
     }
 
+    [Test, Description("Worklog should throw exception when one of entry time is empty or default")]
+    public void WorklogStartTimeAndEndTimeCannotBeEmpty()
+    {
+        // arrange
+        var s1 = new DateTime();
+        var e1 = new DateTime();
+        
+        var s2 = DateTime.MinValue;
+        var e2 = DateTime.MaxValue;
+
+        var entry1 = new Entry { StartTime = s1, EndTime = e1 };
+        var entry2 = new Entry { StartTime = s2, EndTime = e2 };
+        
+        // act & assert
+        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry1));
+        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry2));
+    }
 }

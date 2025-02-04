@@ -10,10 +10,18 @@ public class WorklogService : IWorklogService
 
     public void AddEntry(Entry entry)
     {
+        if (entry.StartTime == DateTime.MinValue || entry.StartTime == DateTime.MaxValue ||
+            entry.EndTime == DateTime.MinValue || entry.EndTime == DateTime.MaxValue)
+        {
+            throw new InvalidWorklogEntryException("StartTime and EndTime must be set");
+        }
+        
         if (entry.StartTime >= entry.EndTime)
         {
             throw new InvalidWorklogEntryException("StartTime can't be greater than EndTime");
         }
+        
+        
         
         _worklog.Entries.Add(entry);
     }
