@@ -126,4 +126,14 @@ public class WorklogTest
         Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry1));
         Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry2));
     }
+    
+    [Test, Description("Worklog should throw exception when entry is null")]
+    public void WorklogEntryCannotBeNull()
+    {
+        // arrange
+        Entry entry = null;
+        
+        // act & assert
+        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));
+    }
 }

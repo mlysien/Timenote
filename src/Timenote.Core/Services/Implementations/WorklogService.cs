@@ -10,6 +10,11 @@ public class WorklogService : IWorklogService
 
     public void AddEntry(Entry entry)
     {
+        if (entry is null)
+        {
+            throw new InvalidWorklogEntryException("Entry cannot be null");
+        }
+        
         if (entry.StartTime == DateTime.MinValue || entry.StartTime == DateTime.MaxValue ||
             entry.EndTime == DateTime.MinValue || entry.EndTime == DateTime.MaxValue)
         {
@@ -20,8 +25,6 @@ public class WorklogService : IWorklogService
         {
             throw new InvalidWorklogEntryException("StartTime can't be greater than EndTime");
         }
-        
-        
         
         _worklog.Entries.Add(entry);
     }
