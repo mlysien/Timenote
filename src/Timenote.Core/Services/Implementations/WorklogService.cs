@@ -16,4 +16,16 @@ public class WorklogService : IWorklogService
     {
         return _worklog.Entries;
     }
+
+    public ICollection<Entry> GetEntriesForDay(DateTime date)
+    {
+        return _worklog.Entries.Where(entry => entry.StartTime.Date == date && entry.EndTime.Date == date).ToList();
+    }
+
+    public TimeSpan GetLoggedTimeForDay(DateTime date)
+    {
+        var ticks = _worklog.Entries.Sum(entry => (entry.EndTime - entry.StartTime).Ticks);
+        
+        return TimeSpan.FromTicks(ticks);
+    }
 }

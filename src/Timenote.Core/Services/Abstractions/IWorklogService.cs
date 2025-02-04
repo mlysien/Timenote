@@ -7,4 +7,8 @@ public interface IWorklogService
     void AddEntry(Entry entry);
     
     ICollection<Entry> GetEntries();
+    
+    ICollection<Entry> GetEntriesForDay(DateTime date);
+    
+    TimeSpan GetLoggedTimeForDay(DateTime date);
 }

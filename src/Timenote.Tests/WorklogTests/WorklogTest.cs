@@ -70,4 +70,26 @@ public class WorklogTest
         
         Assert.That(entriesCollection, Has.Count.EqualTo(expectedCount));
     }
+    
+    [Test, Description("Worklog returns correct logged time for specified day")]
+    public void WorklogReturnCorrectLoggedTime()
+    {
+        // arrange
+        var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
+        var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
+        var expectedLoggedTime = new TimeSpan(8, 0, 0);
+
+        // act
+        _worklogService.AddEntry(new Entry
+        {
+            StartTime = startTime,
+            EndTime = endTime,
+        });
+        
+        // assert
+        var loggedTime = _worklogService.GetLoggedTimeForDay(new DateTime(2025, 01, 01));
+        
+         Assert.That(loggedTime, Is.EqualTo(expectedLoggedTime));
+    } 
+
 }
