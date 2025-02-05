@@ -164,4 +164,37 @@ public class WorklogTest
         // act & assert
         Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));
     }
+    
+    [Test, Description("Worklog entry can be edited")]
+    public void WorklogEntryCanBeEdited()
+    {
+        // arrange
+        var projectId = Guid.NewGuid();
+        var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
+        var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
+        var entry = new Entry
+        {
+            StartTime = startTime,
+            EndTime = endTime,
+            ProjectId = projectId
+        };
+        
+        _worklogService.AddEntry(entry);
+        
+        var loggedTime = _worklogService.GetLoggedTimeForDay(new DateTime(2025, 01, 01));
+        
+        Assert.That(loggedTime, Is.EqualTo(TimeSpan.FromHours(8)));
+        
+        var entryUpdate = new Entry
+        {
+            StartTime = startTime,
+            EndTime = endTime.AddHours(2)
+        };
+        
+        _worklogService.UpdateEntry(entryUpdate);
+        
+        loggedTime = _worklogService.GetLoggedTimeForDay(new DateTime(2025, 01, 01));
+        
+        Assert.That(loggedTime, Is.EqualTo(TimeSpan.FromHours(10)));
+    }
 }
