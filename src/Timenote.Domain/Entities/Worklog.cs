@@ -5,5 +5,5 @@
 /// </summary>
 public class Worklog : EntityBase
 {
-    public ICollection<Entry> Entries { get; private set; } = new List<Entry>();
+    public List<Entry> Entries { get; private set; } = new();
 }
