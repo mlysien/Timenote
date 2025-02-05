@@ -2,5 +2,5 @@
 
 public class EntityBase
 {
-    private Guid Id { get; init; }
+    public Guid Id { get; init; }
 }
