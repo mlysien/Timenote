@@ -19,6 +19,7 @@ public class WorklogTest
     public void SingleEntryCanBeAddedToWorklog()
     {
         // arrange
+        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
         var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
         var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
         
@@ -27,6 +28,7 @@ public class WorklogTest
         {
             StartTime = startTime,
             EndTime = endTime,
+            ProjectId = projectId
         });
         
         // assert
@@ -39,22 +41,27 @@ public class WorklogTest
     public void MultipleEntriesCanBeAddedToWorklog()
     {
         // arrange
+        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
+        
         var entriesToAdd = new List<Entry>()
         {
             new()
             {
                 StartTime = new DateTime(2025, 01, 01, 08, 00, 00),
                 EndTime = new DateTime(2025, 01, 01, 16, 00, 00),
+                ProjectId = projectId
             },
             new()
             {
                 StartTime = new DateTime(2025, 01, 01, 09, 00, 00),
                 EndTime = new DateTime(2025, 01, 01, 17, 00, 00),
+                ProjectId = projectId
             },
             new()
             {
                 StartTime = new DateTime(2025, 01, 01, 06, 00, 00),
                 EndTime = new DateTime(2025, 01, 01, 15, 00, 00),
+                ProjectId = projectId
             }
         };
         
@@ -76,6 +83,7 @@ public class WorklogTest
     public void WorklogReturnCorrectLoggedTime()
     {
         // arrange
+        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
         var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
         var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
         var expectedLoggedTime = new TimeSpan(8, 0, 0);
@@ -85,6 +93,7 @@ public class WorklogTest
         {
             StartTime = startTime,
             EndTime = endTime,
+            ProjectId = projectId
         });
         
         // assert
@@ -97,12 +106,14 @@ public class WorklogTest
     public void WorklogStartTimeCannotBeGreaterThanEndTime()
     {
         // arrange
+        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
         var startTime = new DateTime(2025, 01, 01, 15, 00, 00);
         var endTime = new DateTime(2025, 01, 01, 08, 00, 00);
         var entry = new Entry()
         {
             StartTime = startTime,
             EndTime = endTime,
+            ProjectId = projectId
         };
         
         // act & assert
@@ -113,14 +124,15 @@ public class WorklogTest
     public void WorklogStartTimeAndEndTimeCannotBeEmpty()
     {
         // arrange
+        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
         var s1 = new DateTime();
         var e1 = new DateTime();
         
         var s2 = DateTime.MinValue;
         var e2 = DateTime.MaxValue;
 
-        var entry1 = new Entry { StartTime = s1, EndTime = e1 };
-        var entry2 = new Entry { StartTime = s2, EndTime = e2 };
+        var entry1 = new Entry { StartTime = s1, EndTime = e1, ProjectId = projectId };
+        var entry2 = new Entry { StartTime = s2, EndTime = e2, ProjectId = projectId };
         
         // act & assert
         Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry1));
@@ -132,6 +144,22 @@ public class WorklogTest
     {
         // arrange
         Entry entry = null;
+        
+        // act & assert
+        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));
+    }
+    
+    [Test, Description("Worklog entry must have ProjectId")]
+    public void WorklogEntryMustHaveProjectId()
+    {
+        // arrange
+        var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
+        var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
+        var entry = new Entry
+        {
+            StartTime = startTime,
+            EndTime = endTime
+        };
         
         // act & assert
         Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));

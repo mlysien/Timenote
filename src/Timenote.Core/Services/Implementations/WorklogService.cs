@@ -25,6 +25,11 @@ public class WorklogService : IWorklogService
         {
             throw new InvalidWorklogEntryException("StartTime can't be greater than EndTime");
         }
+
+        if (entry.ProjectId == Guid.Empty)
+        {
+            throw new InvalidWorklogEntryException("ProjectId cannot be empty");
+        }
         
         _worklog.Entries.Add(entry);
     }
