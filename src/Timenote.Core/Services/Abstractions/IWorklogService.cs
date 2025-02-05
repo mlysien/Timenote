@@ -6,6 +6,8 @@ public interface IWorklogService
 {
     void AddEntry(Entry entry);
     
+    void UpdateEntry(Entry entry);
+    
     ICollection<Entry> GetEntries();
     
     ICollection<Entry> GetEntriesForDay(DateTime date);

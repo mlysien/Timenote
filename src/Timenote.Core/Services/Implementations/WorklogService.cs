@@ -1,4 +1,5 @@
-﻿using Timenote.Core.Services.Abstractions;
+﻿using System.Net.Http.Headers;
+using Timenote.Core.Services.Abstractions;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Exceptions;
 
@@ -32,6 +33,14 @@ public class WorklogService : IWorklogService
         }
         
         _worklog.Entries.Add(entry);
+    }
+
+    public void UpdateEntry(Entry entry)
+    {
+        var entryEntity = _worklog.Entries.First(e => e.Id == entry.Id);
+        var index = _worklog.Entries.IndexOf(entryEntity);
+        
+        _worklog.Entries[index] = entry;
     }
 
     public ICollection<Entry> GetEntries()
