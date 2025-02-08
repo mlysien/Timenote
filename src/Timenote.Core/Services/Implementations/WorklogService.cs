@@ -1,15 +1,17 @@
-﻿using System.Net.Http.Headers;
-using Timenote.Core.Services.Abstractions;
+﻿using Timenote.Core.Services.Abstractions;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Exceptions;
+using Timenote.Persistence.Repositories.Abstractions;
 
 namespace Timenote.Core.Services.Implementations;
 
-public class WorklogService : IWorklogService
+public class WorklogService(
+    IEntryRepository entryRepository
+) : IWorklogService
 {
     private readonly Worklog _worklog = new();
 
-    public void AddEntry(Entry entry)
+    public void AddWorklogEntry(Entry entry)
     {
         if (entry is null)
         {
@@ -32,7 +34,7 @@ public class WorklogService : IWorklogService
             throw new InvalidWorklogEntryException("ProjectId cannot be empty");
         }
         
-        _worklog.Entries.Add(entry);
+        entryRepository.Add(entry);
     }
 
     public void UpdateEntry(Entry entry)
@@ -45,7 +47,7 @@ public class WorklogService : IWorklogService
 
     public ICollection<Entry> GetEntries()
     {
-        return _worklog.Entries;
+        return entryRepository.GetAll().ToList();
     }
 
     public ICollection<Entry> GetEntriesForDay(DateTime date)
@@ -53,9 +55,11 @@ public class WorklogService : IWorklogService
         return _worklog.Entries.Where(entry => entry.StartTime.Date == date && entry.EndTime.Date == date).ToList();
     }
 
-    public TimeSpan GetLoggedTimeForDay(DateTime date)
+    public TimeSpan GetEntriesFromDay(DateTime day)
     {
-        var ticks = _worklog.Entries.Sum(entry => (entry.EndTime - entry.StartTime).Ticks);
+        var entries = entryRepository.GetAll().Where(e => e.StartTime.Date == day.Date);
+        
+        var ticks = entries.Sum(entry => (entry.EndTime - entry.StartTime).Ticks);
         
         return TimeSpan.FromTicks(ticks);
     }
