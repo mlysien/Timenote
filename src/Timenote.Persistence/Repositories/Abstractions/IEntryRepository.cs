@@ -5,4 +5,6 @@ namespace Timenote.Persistence.Repositories.Abstractions;
 public interface IEntryRepository
 {
     void Add(Entry entry);
+    
+    IEnumerable<Entry> GetAll();
 }

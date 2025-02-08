@@ -1,4 +1,5 @@
-﻿using Timenote.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Timenote.Domain.Entities;
 using Timenote.Persistence.Context;
 using Timenote.Persistence.Repositories.Abstractions;
 
@@ -10,5 +11,10 @@ public class EntryRepository(DatabaseContext context) : IEntryRepository
     {
         context.Entries.Add(entry);
         context.SaveChanges();
+    }
+
+    public IEnumerable<Entry> GetAll()
+    {
+        return context.Entries.AsNoTracking();
     }
 }
