@@ -13,6 +13,17 @@ public class EntryRepository(DatabaseContext context) : IEntryRepository
         context.SaveChanges();
     }
 
+    public void Update(Entry entry)
+    {
+        context.Update(entry);
+        context.SaveChanges();
+    }
+
+    public Entry? Get(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Entry> GetAll()
     {
         return context.Entries.AsNoTracking();

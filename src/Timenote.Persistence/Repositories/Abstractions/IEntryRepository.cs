@@ -6,5 +6,9 @@ public interface IEntryRepository
 {
     void Add(Entry entry);
     
+    void Update(Entry entry);
+    
+    Entry? Get(Guid id);
+    
     IEnumerable<Entry> GetAll();
 }

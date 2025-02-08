@@ -49,6 +49,45 @@ public class WorklogTest
         });
     }
     
+    [Test, Description("Updating existing entry from worklog")]
+    public void UpdateWorklogEntry_UpdatesSingleEntryFromWorklog()
+    {
+        // arrange
+        using var context = new DatabaseContext(_dbContextOptions);
+        
+        var repository = new EntryRepository(context);
+        var service = new WorklogService(repository);
+        
+        var startTime = new DateTime(2025, 01, 01, 08, 0, 0);
+        
+        var entry = new Entry
+        {
+            StartTime = startTime,
+            EndTime = startTime.AddHours(8),
+            ProjectId = Guid.NewGuid()
+        };
+
+        // Act
+        service.AddWorklogEntry(entry);
+
+        context.ChangeTracker.Clear();
+        
+        Assert.That(service.GetLoggedTimeFromDay(startTime), Is.EqualTo(TimeSpan.FromHours(8)));
+        
+        var updatedEntry = new Entry()
+        {
+            Id = entry.Id,
+            StartTime = startTime,
+            EndTime = startTime.AddHours(10),
+            ProjectId = Guid.NewGuid()
+        };
+        
+        service.UpdateWorklogEntry(updatedEntry);
+        
+        // Assert
+        Assert.That(service.GetLoggedTimeFromDay(startTime), Is.EqualTo(TimeSpan.FromHours(10)));
+    }
+    
     [Test, Description("Getting entries from a day returns correct worktime")]
     public void GetEntriesFromDay_ReturnsCorrectWorktime()
     {
@@ -69,8 +108,8 @@ public class WorklogTest
         // act
         service.AddWorklogEntry(entry);
         
-        var correctDayLogs = service.GetEntriesFromDay(new DateTime(2025, 01, 01));
-        var incorrectDayLogs = service.GetEntriesFromDay(new DateTime(2025, 12, 01));
+        var correctDayLogs = service.GetLoggedTimeFromDay(new DateTime(2025, 01, 01));
+        var incorrectDayLogs = service.GetLoggedTimeFromDay(new DateTime(2025, 12, 01));
         
         // assert
         Assert.Multiple(() =>

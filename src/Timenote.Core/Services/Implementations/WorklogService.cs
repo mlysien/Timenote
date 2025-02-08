@@ -37,12 +37,9 @@ public class WorklogService(
         entryRepository.Add(entry);
     }
 
-    public void UpdateEntry(Entry entry)
+    public void UpdateWorklogEntry(Entry entry)
     {
-        var entryEntity = _worklog.Entries.First(e => e.Id == entry.Id);
-        var index = _worklog.Entries.IndexOf(entryEntity);
-        
-        _worklog.Entries[index] = entry;
+        entryRepository.Update(entry);
     }
 
     public ICollection<Entry> GetEntries()
@@ -55,7 +52,7 @@ public class WorklogService(
         return _worklog.Entries.Where(entry => entry.StartTime.Date == date && entry.EndTime.Date == date).ToList();
     }
 
-    public TimeSpan GetEntriesFromDay(DateTime day)
+    public TimeSpan GetLoggedTimeFromDay(DateTime day)
     {
         var entries = entryRepository.GetAll().Where(e => e.StartTime.Date == day.Date);
         

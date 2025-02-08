@@ -6,9 +6,9 @@ public interface IWorklogService
 {
     void AddWorklogEntry(Entry entry);
     
-    void UpdateEntry(Entry entry);
+    void UpdateWorklogEntry(Entry entry);
     
     ICollection<Entry> GetEntries();
 
-    TimeSpan GetEntriesFromDay(DateTime day);
+    TimeSpan GetLoggedTimeFromDay(DateTime day);
 }
