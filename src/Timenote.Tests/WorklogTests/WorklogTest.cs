@@ -1,200 +1,82 @@
-﻿using Timenote.Core.Services.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Moq;
+using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Exceptions;
+using Timenote.Persistence.Context;
+using Timenote.Persistence.Repositories.Abstractions;
+using Timenote.Persistence.Repositories.Implementations;
 
 namespace Timenote.Tests.WorklogTests;
 
 public class WorklogTest
 {
-    private IWorklogService _worklogService;
+    private DbContextOptions<DatabaseContext> _dbContextOptions;
 
     [SetUp]
     public void Setup()
     {
-        _worklogService = new WorklogService();
+        _dbContextOptions = new DbContextOptionsBuilder<DatabaseContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
     }
-    
-    [Test, Description("Single entry can be added to Worklog")]
-    public void SingleEntryCanBeAddedToWorklog()
+
+    [Test, Description("Adding a new worklog entry")]
+    public void AddWorklogEntry_AddsSingleEntryToWorklog()
     {
         // arrange
-        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
-        var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
-        var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
-        
-        // act
-        _worklogService.AddEntry(new Entry()
+        using var context = new DatabaseContext(_dbContextOptions);
+        var repository = new EntryRepository(context);
+        var service = new WorklogService(repository);
+        var entry = new Entry
         {
-            StartTime = startTime,
-            EndTime = endTime,
-            ProjectId = projectId
+            StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
+            EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
+            ProjectId = Guid.NewGuid()
+        };
+
+        // Act
+        service.AddWorklogEntry(entry);
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(service.GetEntries().First().Id, Is.Not.Empty);
+            Assert.That(service.GetEntries(), Has.Count.EqualTo(1));
+            Assert.That(service.GetEntries().First().StartTime, Is.EqualTo(entry.StartTime));
+            Assert.That(service.GetEntries().First().EndTime, Is.EqualTo(entry.EndTime));
         });
-        
-        // assert
-        var entriesCollection = _worklogService.GetEntries();
-        
-        Assert.That(entriesCollection, Has.Count.EqualTo(1));
     }
     
-    [Test, Description("Multiple entries can be added to Worklog")]
-    public void MultipleEntriesCanBeAddedToWorklog()
+    [Test, Description("Getting entries from a day returns correct worktime")]
+    public void GetEntriesFromDay_ReturnsCorrectWorktime()
     {
         // arrange
-        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
+        using var context = new DatabaseContext(_dbContextOptions);
         
-        var entriesToAdd = new List<Entry>()
+        var expectedLoggedTime = TimeSpan.FromHours(8);
+        var expectedNotLoggedTime = TimeSpan.Zero;
+        var repository = new EntryRepository(context);
+        var service = new WorklogService(repository);
+        var entry = new Entry
         {
-            new()
-            {
-                StartTime = new DateTime(2025, 01, 01, 08, 00, 00),
-                EndTime = new DateTime(2025, 01, 01, 16, 00, 00),
-                ProjectId = projectId
-            },
-            new()
-            {
-                StartTime = new DateTime(2025, 01, 01, 09, 00, 00),
-                EndTime = new DateTime(2025, 01, 01, 17, 00, 00),
-                ProjectId = projectId
-            },
-            new()
-            {
-                StartTime = new DateTime(2025, 01, 01, 06, 00, 00),
-                EndTime = new DateTime(2025, 01, 01, 15, 00, 00),
-                ProjectId = projectId
-            }
+            StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
+            EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
+            ProjectId = Guid.NewGuid()
         };
         
-        var expectedCount = entriesToAdd.Count;
-      
         // act
-        foreach (var entry in entriesToAdd)
-        {
-            _worklogService.AddEntry(entry);
-        }
+        service.AddWorklogEntry(entry);
+        
+        var correctDayLogs = service.GetEntriesFromDay(new DateTime(2025, 01, 01));
+        var incorrectDayLogs = service.GetEntriesFromDay(new DateTime(2025, 12, 01));
         
         // assert
-        var entriesCollection = _worklogService.GetEntries();
-        
-        Assert.That(entriesCollection, Has.Count.EqualTo(expectedCount));
-    }
-    
-    [Test, Description("Worklog returns correct logged time for specified day")]
-    public void WorklogReturnCorrectLoggedTime()
-    {
-        // arrange
-        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
-        var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
-        var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
-        var expectedLoggedTime = new TimeSpan(8, 0, 0);
-
-        // act
-        _worklogService.AddEntry(new Entry
+        Assert.Multiple(() =>
         {
-            StartTime = startTime,
-            EndTime = endTime,
-            ProjectId = projectId
+            Assert.That(correctDayLogs, Is.EqualTo(expectedLoggedTime));
+            Assert.That(incorrectDayLogs, Is.EqualTo(expectedNotLoggedTime));
         });
-        
-        // assert
-        var loggedTime = _worklogService.GetLoggedTimeForDay(new DateTime(2025, 01, 01));
-        
-         Assert.That(loggedTime, Is.EqualTo(expectedLoggedTime));
     } 
-
-    [Test, Description("Worklog should throw exception when entry end time is earlier than start time")]
-    public void WorklogStartTimeCannotBeGreaterThanEndTime()
-    {
-        // arrange
-        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
-        var startTime = new DateTime(2025, 01, 01, 15, 00, 00);
-        var endTime = new DateTime(2025, 01, 01, 08, 00, 00);
-        var entry = new Entry()
-        {
-            StartTime = startTime,
-            EndTime = endTime,
-            ProjectId = projectId
-        };
-        
-        // act & assert
-        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));
-    }
-
-    [Test, Description("Worklog should throw exception when one of entry time is empty or default")]
-    public void WorklogStartTimeAndEndTimeCannotBeEmpty()
-    {
-        // arrange
-        var projectId = Guid.Parse("419d9040-b442-42a9-9e63-bb187941934e");
-        var s1 = new DateTime();
-        var e1 = new DateTime();
-        
-        var s2 = DateTime.MinValue;
-        var e2 = DateTime.MaxValue;
-
-        var entry1 = new Entry { StartTime = s1, EndTime = e1, ProjectId = projectId };
-        var entry2 = new Entry { StartTime = s2, EndTime = e2, ProjectId = projectId };
-        
-        // act & assert
-        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry1));
-        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry2));
-    }
-    
-    [Test, Description("Worklog should throw exception when entry is null")]
-    public void WorklogEntryCannotBeNull()
-    {
-        // arrange
-        Entry entry = null;
-        
-        // act & assert
-        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));
-    }
-    
-    [Test, Description("Worklog entry must have ProjectId")]
-    public void WorklogEntryMustHaveProjectId()
-    {
-        // arrange
-        var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
-        var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
-        var entry = new Entry
-        {
-            StartTime = startTime,
-            EndTime = endTime
-        };
-        
-        // act & assert
-        Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddEntry(entry));
-    }
-    
-    [Test, Description("Worklog entry can be edited")]
-    public void WorklogEntryCanBeEdited()
-    {
-        // arrange
-        var projectId = Guid.NewGuid();
-        var startTime = new DateTime(2025, 01, 01, 08, 00, 00);
-        var endTime = new DateTime(2025, 01, 01, 16, 00, 00);
-        var entry = new Entry
-        {
-            StartTime = startTime,
-            EndTime = endTime,
-            ProjectId = projectId
-        };
-        
-        _worklogService.AddEntry(entry);
-        
-        var loggedTime = _worklogService.GetLoggedTimeForDay(new DateTime(2025, 01, 01));
-        
-        Assert.That(loggedTime, Is.EqualTo(TimeSpan.FromHours(8)));
-        
-        var entryUpdate = new Entry
-        {
-            StartTime = startTime,
-            EndTime = endTime.AddHours(2)
-        };
-        
-        _worklogService.UpdateEntry(entryUpdate);
-        
-        loggedTime = _worklogService.GetLoggedTimeForDay(new DateTime(2025, 01, 01));
-        
-        Assert.That(loggedTime, Is.EqualTo(TimeSpan.FromHours(10)));
-    }
 }

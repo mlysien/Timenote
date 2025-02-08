@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Timenote.Domain\Timenote.Domain.csproj" />
+      <ProjectReference Include="..\Timenote.Persistence\Timenote.Persistence.csproj" />
     </ItemGroup>
 
 </Project>
