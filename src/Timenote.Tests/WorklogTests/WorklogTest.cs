@@ -118,4 +118,35 @@ public class WorklogTest
             Assert.That(incorrectDayLogs, Is.EqualTo(expectedNotLoggedTime));
         });
     } 
+    
+    [Test, Description("Removing existing entry from worklog")]
+    public void RemoveWorklogEntry_RemovesSingleEntryFromWorklog()
+    {
+        // arrange
+        using var context = new DatabaseContext(_dbContextOptions);
+        
+        var repository = new EntryRepository(context);
+        var service = new WorklogService(repository);
+        
+        var startTime = new DateTime(2025, 01, 01, 08, 0, 0);
+        
+        var entry = new Entry
+        {
+            StartTime = startTime,
+            EndTime = startTime.AddHours(8),
+            ProjectId = Guid.NewGuid()
+        };
+
+        // Act
+        service.AddWorklogEntry(entry);
+        
+        Assert.That(service.GetEntries(), Has.Count.EqualTo(1));
+        
+        context.ChangeTracker.Clear();
+        
+        service.RemoveWorklogEntry(entry);
+        
+        // Assert
+        Assert.That(service.GetEntries(), Has.Count.EqualTo(0));
+    }
 }

@@ -8,6 +8,8 @@ public interface IWorklogService
     
     void UpdateWorklogEntry(Entry entry);
     
+    void RemoveWorklogEntry(Entry entry);
+    
     ICollection<Entry> GetEntries();
 
     TimeSpan GetLoggedTimeFromDay(DateTime day);

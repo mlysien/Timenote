@@ -9,8 +9,6 @@ public class WorklogService(
     IEntryRepository entryRepository
 ) : IWorklogService
 {
-    private readonly Worklog _worklog = new();
-
     public void AddWorklogEntry(Entry entry)
     {
         if (entry is null)
@@ -42,14 +40,14 @@ public class WorklogService(
         entryRepository.Update(entry);
     }
 
+    public void RemoveWorklogEntry(Entry entry)
+    {
+        entryRepository.Remove(entry);
+    }
+
     public ICollection<Entry> GetEntries()
     {
         return entryRepository.GetAll().ToList();
-    }
-
-    public ICollection<Entry> GetEntriesForDay(DateTime date)
-    {
-        return _worklog.Entries.Where(entry => entry.StartTime.Date == date && entry.EndTime.Date == date).ToList();
     }
 
     public TimeSpan GetLoggedTimeFromDay(DateTime day)

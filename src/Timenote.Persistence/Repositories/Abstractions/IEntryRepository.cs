@@ -8,6 +8,8 @@ public interface IEntryRepository
     
     void Update(Entry entry);
     
+    void Remove(Entry entry);
+    
     Entry? Get(Guid id);
     
     IEnumerable<Entry> GetAll();

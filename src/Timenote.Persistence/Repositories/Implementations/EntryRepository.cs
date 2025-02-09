@@ -19,9 +19,15 @@ public class EntryRepository(DatabaseContext context) : IEntryRepository
         context.SaveChanges();
     }
 
+    public void Remove(Entry entry)
+    {
+        context.Remove(entry);
+        context.SaveChanges();
+    }
+
     public Entry? Get(Guid id)
     {
-        throw new NotImplementedException();
+        return context.Entries.AsNoTracking().FirstOrDefault(e => e.Id == id);
     }
 
     public IEnumerable<Entry> GetAll()
