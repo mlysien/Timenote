@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moq;
+using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
 using Timenote.Persistence.Context;
+using Timenote.Persistence.Repositories.Abstractions;
 using Timenote.Persistence.Repositories.Implementations;
 
 namespace Timenote.Tests.WorklogTests;
@@ -9,44 +12,51 @@ namespace Timenote.Tests.WorklogTests;
 [TestFixture(TestName = "Happy path flow tests", Description = "Contains tests for all happy paths")]
 public class HappyPathTests
 {
-    private DbContextOptions<DatabaseContext> _dbContextOptions;
-
+    private Mock<IEntryRepository> _entryRepositoryMock;
+    private IWorklogService _worklogService;
+    
     [SetUp]
     public void Setup()
     {
-        _dbContextOptions = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
+        _entryRepositoryMock = new Mock<IEntryRepository>();
+        _worklogService = new WorklogService(_entryRepositoryMock.Object);
     }
     
     [Test, Description("Getting entries from a day returns correct worktime")]
     public void GetEntriesFromDay_ReturnsCorrectWorktime()
     {
         // arrange
-        using var context = new DatabaseContext(_dbContextOptions);
-        
-        var expectedLoggedTime = TimeSpan.FromHours(8);
-        var expectedNotLoggedTime = TimeSpan.Zero;
-        var repository = new EntryRepository(context);
-        var service = new WorklogService(repository);
-        var entry = new Entry
+        var expectedLoggedTime = TimeSpan.FromHours(12);
+        _entryRepositoryMock.Setup(m => m.GetAll()).Returns(new List<Entry>
         {
-            StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
-            EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
-            ProjectId = Guid.NewGuid()
-        };
-        
-        // act
-        service.AddWorklogEntry(entry);
-        
-        var correctDayLogs = service.GetLoggedTimeFromDay(new DateTime(2025, 01, 01));
-        var incorrectDayLogs = service.GetLoggedTimeFromDay(new DateTime(2025, 12, 01));
-        
-        // assert
-        Assert.Multiple(() =>
-        {
-            Assert.That(correctDayLogs, Is.EqualTo(expectedLoggedTime));
-            Assert.That(incorrectDayLogs, Is.EqualTo(expectedNotLoggedTime));
+            new()
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = Guid.NewGuid(),
+                StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
+                EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = Guid.NewGuid(),
+                StartTime = new DateTime(2025, 01, 01, 16, 0, 0),
+                EndTime = new DateTime(2025, 01, 01, 20, 0, 0),
+            },
+            // this entry should not be calculated
+            new() 
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = Guid.NewGuid(),
+                StartTime = new DateTime(2025, 01, 2, 8, 0, 0),
+                EndTime = new DateTime(2025, 01, 2, 10, 0, 0),
+            }
         });
+
+        // act
+        var loggedTime = _worklogService.GetLoggedTimeFromDay(new DateTime(2025, 01, 01));
+        
+        // arrange
+        Assert.That(loggedTime, Is.EqualTo(expectedLoggedTime));
     } 
 }
