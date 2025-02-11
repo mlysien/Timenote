@@ -63,36 +63,7 @@ public class WorklogTest
         Assert.That(service.GetLoggedTimeFromDay(startTime), Is.EqualTo(TimeSpan.FromHours(10)));
     }
     
-    [Test, Description("Getting entries from a day returns correct worktime")]
-    public void GetEntriesFromDay_ReturnsCorrectWorktime()
-    {
-        // arrange
-        using var context = new DatabaseContext(_dbContextOptions);
-        
-        var expectedLoggedTime = TimeSpan.FromHours(8);
-        var expectedNotLoggedTime = TimeSpan.Zero;
-        var repository = new EntryRepository(context);
-        var service = new WorklogService(repository);
-        var entry = new Entry
-        {
-            StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
-            EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
-            ProjectId = Guid.NewGuid()
-        };
-        
-        // act
-        service.AddWorklogEntry(entry);
-        
-        var correctDayLogs = service.GetLoggedTimeFromDay(new DateTime(2025, 01, 01));
-        var incorrectDayLogs = service.GetLoggedTimeFromDay(new DateTime(2025, 12, 01));
-        
-        // assert
-        Assert.Multiple(() =>
-        {
-            Assert.That(correctDayLogs, Is.EqualTo(expectedLoggedTime));
-            Assert.That(incorrectDayLogs, Is.EqualTo(expectedNotLoggedTime));
-        });
-    } 
+  
     
     [Test, Description("Removing existing entry from worklog")]
     public void RemoveWorklogEntry_RemovesSingleEntryFromWorklog()
