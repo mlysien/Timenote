@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Moq;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Exceptions;
@@ -8,7 +7,8 @@ using Timenote.Persistence.Repositories.Implementations;
 
 namespace Timenote.Tests.WorklogTests;
 
-public class ErrorHandlingTest
+[TestFixture(TestName = "Error handling tests", Description = "Contains tests for all error cases")]
+public class ErrorHandlingTests
 {
     private DbContextOptions<DatabaseContext> _dbContextOptions;
     
