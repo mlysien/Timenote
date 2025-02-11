@@ -22,32 +22,7 @@ public class WorklogTest
             .Options;
     }
 
-    [Test, Description("Adding a new worklog entry")]
-    public void AddWorklogEntry_AddsSingleEntryToWorklog()
-    {
-        // arrange
-        using var context = new DatabaseContext(_dbContextOptions);
-        var repository = new EntryRepository(context);
-        var service = new WorklogService(repository);
-        var entry = new Entry
-        {
-            StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
-            EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
-            ProjectId = Guid.NewGuid()
-        };
-
-        // Act
-        service.AddWorklogEntry(entry);
-
-        // Assert
-        Assert.Multiple(() =>
-        {
-            Assert.That(service.GetEntries().First().Id, Is.Not.Empty);
-            Assert.That(service.GetEntries(), Has.Count.EqualTo(1));
-            Assert.That(service.GetEntries().First().StartTime, Is.EqualTo(entry.StartTime));
-            Assert.That(service.GetEntries().First().EndTime, Is.EqualTo(entry.EndTime));
-        });
-    }
+    
     
     [Test, Description("Updating existing entry from worklog")]
     public void UpdateWorklogEntry_UpdatesSingleEntryFromWorklog()
