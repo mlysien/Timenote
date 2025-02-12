@@ -34,12 +34,9 @@ public class WorklogService(
 
         var entries = entryRepository.GetAll().Where(e => e.StartTime.Date == entry.StartTime.Date);
 
-        foreach (var entryEntry in entries)
+        if (entries.Any(entryEntry => entry.StartTime >= entryEntry.StartTime || entry.StartTime <= entryEntry.EndTime))
         {
-            if (entry.StartTime >= entryEntry.StartTime || entry.StartTime <= entryEntry.EndTime)
-            {
-                throw new InvalidWorklogEntryException("Time can't overlap on existing entry");
-            }
+            throw new InvalidWorklogEntryException("Time can't overlap on existing entry");
         }
         
         entryRepository.Add(entry);
