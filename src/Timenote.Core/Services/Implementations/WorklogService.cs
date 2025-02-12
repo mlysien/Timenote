@@ -37,7 +37,12 @@ public class WorklogService(
 
     public void UpdateWorklogEntry(Entry entry)
     {
-        entryRepository.Update(entry);
+        var entryEntity = entryRepository.Get(entry.Id);
+
+        if (entryEntity is not null)
+        {
+            entryRepository.Update(entry);
+        }
     }
 
     public void RemoveWorklogEntry(Entry entry)
