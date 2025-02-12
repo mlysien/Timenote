@@ -39,4 +39,48 @@ public class ErrorHandlingTests
             Assert.That(exception!.Message, Is.Not.Empty);
         });
     }
+    
+    [Test, Description("Worklog entry cannot overlap on an existing entry")]
+    public void EntryCannotOverlapOnExistingEntry()
+    {
+        // arrange
+        _entryRepositoryMock.Setup(repository => repository.GetAll()).Returns(new List<Entry>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = Guid.NewGuid(),
+                StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
+                EndTime = new DateTime(2025, 01, 01, 10, 0, 0),
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = Guid.NewGuid(),
+                StartTime = new DateTime(2025, 01, 01, 10, 0, 0),
+                EndTime = new DateTime(2025, 01, 01, 12, 0, 0),
+            }
+        });
+
+        var entry = new Entry()
+        {
+            Id = Guid.NewGuid(),
+            ProjectId = Guid.NewGuid(),
+            StartTime = new DateTime(2025, 01, 01, 09, 0, 0),
+            EndTime = new DateTime(2025, 01, 01, 12, 0, 0),
+        };
+        
+        // act
+        var exception = Assert.Throws<InvalidWorklogEntryException>(() => _worklogService.AddWorklogEntry(entry));
+            
+        // assert
+        Assert.Multiple(() =>
+        {
+            _entryRepositoryMock.Verify(repository => repository.Add(entry), Times.Never);
+            
+            Assert.That(exception, Is.Not.Null);
+            Assert.That(exception.Message, Is.Not.Empty);
+        });
+    }
+    
 }
