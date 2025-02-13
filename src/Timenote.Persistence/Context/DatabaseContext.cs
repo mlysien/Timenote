@@ -15,13 +15,9 @@ public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbCont
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Project>()
-            .HasKey(project => project.Id);
-        
-        modelBuilder.Entity<Project>()
-            .HasOne(project => project.Worklog)
-            .WithOne(worklog => worklog.Project)
-            .HasForeignKey<Worklog>(worklog => worklog.ProjectId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasMany(p => p.Worklogs)
+            .WithOne(w => w.Project)
+            .HasForeignKey(w => w.ProjectId);
         
         modelBuilder.Entity<Worklog>()
             .HasKey(worklog => worklog.Id);
