@@ -8,7 +8,7 @@ public class ProjectRepository(DatabaseContext context) : IProjectRepository
 {
     public async Task Add(Project project)
     {
-        context.Add(project);
+        context.Projects.Add(project);
         
         await context.SaveChangesAsync();
     }
