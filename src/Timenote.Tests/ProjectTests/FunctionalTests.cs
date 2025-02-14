@@ -11,28 +11,44 @@ public class FunctionalTests
 {
     private Mock<IProjectRepository> _projectRepositoryMock;
     private IProjectService _projectService;
-    
+
     [SetUp]
     public void Setup()
     {
         _projectRepositoryMock = new Mock<IProjectRepository>();
         _projectService = new ProjectService(_projectRepositoryMock.Object);
     }
-    
+
     [Test, Description("Adding a new Project entity to database")]
     public async Task AddNewProjectShouldSaveInDatabase()
     {
         // arrange
         var project = new Project
         {
-            Id = Guid.NewGuid(),
+            Budget = 2000,
+            Name = "Test project",
+            IsActive = true
         };
-        
+
+        _projectRepositoryMock.Setup(repository => repository
+            .AddAsync(project)).ReturnsAsync(new Project
+            {
+                Id = Guid.NewGuid(),
+                Budget = project.Budget,
+                Name = project.Name,
+                IsActive = project.IsActive,
+                Worklogs = project.Worklogs
+            });
+
         // act
-        await _projectService.CreateProjectAsync(project);
+        var createdProject = await _projectService.CreateProjectAsync(project);
         
         // assert
-        _projectRepositoryMock.Verify(repository => repository.Add(project), Times.Once);
+        Assert.That(createdProject, Is.Not.Null);
+        Assert.That(createdProject.Id, Is.Not.Empty);
+        Assert.That(createdProject.Name, Is.EqualTo(project.Name));
+        Assert.That(createdProject.Budget, Is.EqualTo(project.Budget));
+        
+        _projectRepositoryMock.Verify(repository => repository.AddAsync(project), Times.Once);
     }
-
 }

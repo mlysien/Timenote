@@ -4,5 +4,5 @@ namespace Timenote.Core.Services.Abstractions;
 
 public interface IProjectService
 {
-    Task CreateProjectAsync(Project project);
+    Task<Project> CreateProjectAsync(Project project);
 }

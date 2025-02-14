@@ -4,10 +4,10 @@ using Timenote.Persistence.Repositories.Abstractions;
 
 namespace Timenote.Core.Services.Implementations;
 
-public class ProjectService(IProjectRepository projectRepository) : IProjectService
+public sealed class ProjectService(IProjectRepository projectRepository) : IProjectService
 {
-    public async Task CreateProjectAsync(Project project)
+    public async Task<Project> CreateProjectAsync(Project project)
     {
-        await projectRepository.Add(project);
+        return await projectRepository.AddAsync(project);
     }
 }

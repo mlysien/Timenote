@@ -1,15 +1,18 @@
-﻿using Timenote.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Timenote.Domain.Entities;
 using Timenote.Persistence.Context;
 using Timenote.Persistence.Repositories.Abstractions;
 
 namespace Timenote.Persistence.Repositories.Implementations;
 
-public class ProjectRepository(DatabaseContext context) : IProjectRepository
+internal sealed class ProjectRepository(DatabaseContext context) : IProjectRepository
 {
-    public async Task Add(Project project)
+    public async Task<Project> AddAsync(Project project)
     {
         context.Projects.Add(project);
         
         await context.SaveChangesAsync();
+        
+        return project;
     }
 }

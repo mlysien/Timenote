@@ -4,5 +4,5 @@ namespace Timenote.Persistence.Repositories.Abstractions;
 
 public interface IProjectRepository
 {
-    Task Add(Project project);
+    Task<Project> AddAsync(Project project);
 }
