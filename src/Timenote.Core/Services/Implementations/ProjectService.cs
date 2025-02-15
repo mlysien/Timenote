@@ -10,4 +10,14 @@ public sealed class ProjectService(IProjectRepository projectRepository) : IProj
     {
         return await projectRepository.AddAsync(project);
     }
+
+    public async Task<Project> UpdateProjectAsync(Project project)
+    {
+        if (await projectRepository.ExistsAsync(project.Id))
+        {
+            return await projectRepository.UpdateAsync(project);
+        }
+        
+        throw new Exception("Project not found");
+    }
 }
