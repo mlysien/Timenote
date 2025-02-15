@@ -1,5 +1,6 @@
 ﻿using Timenote.Core.Services.Abstractions;
 using Timenote.Domain.Entities;
+using Timenote.Domain.Exceptions;
 using Timenote.Persistence.Repositories.Abstractions;
 
 namespace Timenote.Core.Services.Implementations;
@@ -18,6 +19,6 @@ public sealed class ProjectService(IProjectRepository projectRepository) : IProj
             return await projectRepository.UpdateAsync(project);
         }
         
-        throw new Exception("Project not found");
+        throw new ProjectNotFoundException(project.Id);
     }
 }

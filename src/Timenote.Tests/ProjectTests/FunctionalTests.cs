@@ -2,6 +2,7 @@
 using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
+using Timenote.Domain.Exceptions;
 using Timenote.Persistence.Repositories.Abstractions;
 
 namespace Timenote.Tests.ProjectTests;
@@ -83,5 +84,30 @@ public class FunctionalTests
         Assert.That(result.Id, Is.EqualTo(projectUpdated.Id));
         Assert.That(result.Name, Is.EqualTo(projectUpdated.Name));
         _projectRepositoryMock.Verify(r => r.UpdateAsync(projectUpdated), Times.Once);
+    }
+    
+    [Test, Description("Updating a new Project entity when exist should update existing project")]
+    public void UpdateProject_WhenNotExists_ShouldThrowException()
+    {
+        // Arrange
+        var project = new Project
+        {
+            Id = Guid.NewGuid(),
+            Name = "Project name updated",
+            Budget = 4000,
+            IsActive = true
+        };
+
+        _projectRepositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(false);
+      
+        // act
+        var exception = Assert.ThrowsAsync<ProjectNotFoundException>(() => _projectService.UpdateProjectAsync(project));
+
+        // Assert
+        Assert.That(exception, Is.Not.Null);
+        Assert.That(exception.Message, Is.Not.Empty);
+        Assert.That(exception.Message, Contains.Substring(project.Id.ToString()));
+        
+        _projectRepositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
     }
 }
