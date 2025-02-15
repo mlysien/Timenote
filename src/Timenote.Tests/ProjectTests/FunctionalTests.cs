@@ -51,4 +51,37 @@ public class FunctionalTests
         
         _projectRepositoryMock.Verify(repository => repository.AddAsync(project), Times.Once);
     }
+    
+    [Test, Description("Updating a new Project entity when exist should update existing project")]
+    public async Task UpdateProject_WhenExists_ShouldUpdateProject()
+    {
+        // Arrange
+        var project = new Project
+        {
+            Id = Guid.NewGuid(), 
+            Name = "Project name",
+            Budget = 2000,
+            IsActive = true
+        };
+        
+        var projectUpdated = new Project
+        {
+            Id = project.Id,
+            Name = "Project name updated",
+            Budget = 4000,
+            IsActive = true
+        };
+
+        _projectRepositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
+        _projectRepositoryMock.Setup(repository => repository.UpdateAsync(projectUpdated)).ReturnsAsync(projectUpdated);
+        
+        // Act
+        var result = await _projectService.UpdateProjectAsync(projectUpdated);
+
+        // Assert
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Id, Is.EqualTo(projectUpdated.Id));
+        Assert.That(result.Name, Is.EqualTo(projectUpdated.Name));
+        _projectRepositoryMock.Verify(r => r.UpdateAsync(projectUpdated), Times.Once);
+    }
 }
