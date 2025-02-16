@@ -21,4 +21,14 @@ public sealed class ProjectService(IProjectRepository projectRepository) : IProj
         
         throw new ProjectNotFoundException(project.Id);
     }
+
+    public async Task DeleteProjectAsync(Project project)
+    {
+        if (await projectRepository.ExistsAsync(project.Id))
+        {
+            await projectRepository.DeleteAsync(project);
+        }
+        
+        throw new ProjectNotFoundException(project.Id);
+    }
 }

@@ -7,4 +7,6 @@ public interface IProjectService
     Task<Project> CreateProjectAsync(Project project);
     
     Task<Project> UpdateProjectAsync(Project project);
+    
+    Task DeleteProjectAsync(Project project);
 }
