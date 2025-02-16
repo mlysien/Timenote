@@ -131,4 +131,29 @@ public class FunctionalTests
         // Assert
         _projectRepositoryMock.Verify(r => r.DeleteAsync(project), Times.Once);
     }    
+    
+    [Test, Description("Deleting Project entity when doesn't exist throws an exception")]
+    public void DeleteProject_WhenDoesntExists_ThrowsException()
+    {
+        // Arrange
+        var project = new Project
+        {
+            Id = Guid.NewGuid(),
+            Name = "Project name",
+            Budget = 4000,
+            IsActive = true
+        };
+
+        _projectRepositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(false);
+      
+        // act
+        var exception = Assert.ThrowsAsync<ProjectNotFoundException>(() => _projectService.DeleteProjectAsync(project));
+
+        // Assert
+        Assert.That(exception, Is.Not.Null);
+        Assert.That(exception.Message, Is.Not.Empty);
+        Assert.That(exception.Message, Contains.Substring(project.Id.ToString()));
+        
+        _projectRepositoryMock.Verify(r => r.DeleteAsync(project), Times.Never);
+    }
 }
