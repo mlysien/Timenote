@@ -86,7 +86,7 @@ public class FunctionalTests
         _projectRepositoryMock.Verify(r => r.UpdateAsync(projectUpdated), Times.Once);
     }
     
-    [Test, Description("Updating a new Project entity when exist should update existing project")]
+    [Test, Description("Updating Project entity when Project doesn't exist throws an exception")]
     public void UpdateProject_WhenNotExists_ShouldThrowException()
     {
         // Arrange
@@ -110,4 +110,25 @@ public class FunctionalTests
         
         _projectRepositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
     }
+    
+    [Test, Description("Deleting Project entity should invoke delete method from repository")]
+    public void DeleteProject_WhenExists_ShouldDeleteProject()
+    {
+        // Arrange
+        var project = new Project
+        {
+            Id = Guid.NewGuid(),
+            Name = "Project name",
+            Budget = 4000,
+            IsActive = true
+        };
+
+        _projectRepositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
+      
+        // act
+        _projectService.DeleteProjectAsync(project);
+
+        // Assert
+        _projectRepositoryMock.Verify(r => r.DeleteAsync(project), Times.Once);
+    }    
 }
