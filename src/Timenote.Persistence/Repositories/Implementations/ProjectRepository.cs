@@ -34,4 +34,11 @@ internal sealed class ProjectRepository(DatabaseContext context) : IProjectRepos
         
         return project;
     }
+
+    public async Task DeleteAsync(Project project)
+    {
+        context.Projects.Remove(project);
+        
+        await context.SaveChangesAsync();
+    }
 }

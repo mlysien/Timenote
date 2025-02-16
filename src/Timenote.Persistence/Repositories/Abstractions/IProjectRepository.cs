@@ -11,4 +11,6 @@ public interface IProjectRepository
     Task<Project> AddAsync(Project project);
     
     Task<Project> UpdateAsync(Project project);
+    
+    Task DeleteAsync(Project project);
 }
