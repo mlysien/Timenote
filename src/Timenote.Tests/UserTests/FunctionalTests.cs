@@ -48,4 +48,28 @@ public class FunctionalTests
         
         _userRepositoryMock.Verify(repository => repository.AddAsync(user), Times.Once);
     }
+    
+    [Test, Description("Updating existed User should invoke repository method for modify User entity")]
+    public async Task UpdateUser_WhenExists_ShouldUpdateUserEntity()
+    {
+        // arrange
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = "John Doe",
+            Email = "john.doe@timenote.com"
+        };
+        
+        _userRepositoryMock.Setup(r => r.ExistsAsync(user.Id)).ReturnsAsync(true);
+        _userRepositoryMock.Setup(repository => repository.UpdateAsync(user)).ReturnsAsync(user);
+        
+        // act
+        var result = await _userService.UpdateUserAsync(user);
+
+        // assert
+        Assert.That(result, Is.Not.Null);
+        Assert.That(result.Id, Is.EqualTo(user.Id));
+        Assert.That(result.Name, Is.EqualTo(user.Name));
+        _userRepositoryMock.Verify(r => r.UpdateAsync(user), Times.Once);
+    }
 }
