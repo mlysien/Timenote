@@ -2,6 +2,7 @@
 using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
+using Timenote.Domain.Exceptions;
 using Timenote.Persistence.Repositories.Abstractions;
 
 namespace Timenote.Tests.UserTests;
@@ -19,8 +20,8 @@ public class FunctionalTests
         _userService = new UserService(_userRepositoryMock.Object);
     }
     
-    [Test, Description("Creating new User should invoke repository method for create User entity")]
-    public async Task CreateUser_ShouldInvokeRepositoryMethodForCreateUserEntity()
+    [Test, Description("Creating new User should invoke repository method for add User entity")]
+    public async Task CreateUser_ShouldAddUserEntity()
     {
         // arrange
         var user = new User
@@ -70,6 +71,32 @@ public class FunctionalTests
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Id, Is.EqualTo(user.Id));
         Assert.That(result.Name, Is.EqualTo(user.Name));
+        
         _userRepositoryMock.Verify(r => r.UpdateAsync(user), Times.Once);
+    }
+    
+    [Test, Description("Updating not existed User should throw an exception")]
+    public void UpdateUser_WhenNotExists_ShouldThrowException()
+    {
+        // arrange
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = "John Doe",
+            Email = "john.doe@timenote.com"
+        };
+        
+        _userRepositoryMock.Setup(r => r.ExistsAsync(user.Id)).ReturnsAsync(false);
+        _userRepositoryMock.Setup(repository => repository.UpdateAsync(user)).ReturnsAsync(user);
+        
+        // act
+        var exception = Assert.ThrowsAsync<UserNotFoundException>(() => _userService.UpdateUserAsync(user));
+
+        // Assert
+        Assert.That(exception, Is.Not.Null);
+        Assert.That(exception.Message, Is.Not.Empty);
+        Assert.That(exception.Message, Contains.Substring(user.Id.ToString()));
+        
+        _userRepositoryMock.Verify(r => r.UpdateAsync(user), Times.Never);
     }
 }
