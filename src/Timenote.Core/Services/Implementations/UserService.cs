@@ -1,5 +1,6 @@
 ﻿using Timenote.Core.Services.Abstractions;
 using Timenote.Domain.Entities;
+using Timenote.Domain.Exceptions;
 using Timenote.Persistence.Repositories.Abstractions;
 
 namespace Timenote.Core.Services.Implementations;
@@ -18,6 +19,6 @@ public class UserService(IUserRepository userRepository) : IUserService
             return await userRepository.UpdateAsync(user);
         }
 
-        throw new Exception("");
+        throw new UserNotFoundException(user.Id);
     }
 }
