@@ -10,4 +10,14 @@ public class UserService(IUserRepository userRepository) : IUserService
     {
         return await userRepository.AddAsync(user);
     }
+
+    public async Task<User> UpdateUserAsync(User user)
+    {
+        if (await userRepository.ExistsAsync(user.Id))
+        {
+            return await userRepository.UpdateAsync(user);
+        }
+
+        throw new Exception("");
+    }
 }
