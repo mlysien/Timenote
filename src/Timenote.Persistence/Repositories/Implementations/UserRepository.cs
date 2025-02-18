@@ -9,4 +9,14 @@ public class UserRepository : IUserRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task<bool> ExistsAsync(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<User> UpdateAsync(User user)
+    {
+        throw new NotImplementedException();
+    }
 }
