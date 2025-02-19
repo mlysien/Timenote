@@ -26,7 +26,6 @@ public class FunctionalTests
         var entry = new Entry
         {
             Id = Guid.NewGuid(),
-            ProjectId = Guid.NewGuid(),
             StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
         };
@@ -45,7 +44,6 @@ public class FunctionalTests
         var entry = new Entry
         {
             Id = Guid.NewGuid(),
-            ProjectId = Guid.NewGuid(),
             StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
         };
@@ -66,7 +64,6 @@ public class FunctionalTests
         var entry = new Entry
         {
             Id = Guid.NewGuid(),
-            ProjectId = Guid.NewGuid(),
             StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
         };

@@ -27,11 +27,6 @@ public class WorklogService(
             throw new InvalidWorklogEntryException("StartTime can't be greater than EndTime");
         }
 
-        if (entry.ProjectId == Guid.Empty)
-        {
-            throw new InvalidWorklogEntryException("ProjectId cannot be empty");
-        }
-
         var entries = entryRepository.GetAll().Where(e => e.StartTime.Date == entry.StartTime.Date);
 
         if (entries.Any(entryEntry => entry.StartTime >= entryEntry.StartTime || entry.StartTime <= entryEntry.EndTime))

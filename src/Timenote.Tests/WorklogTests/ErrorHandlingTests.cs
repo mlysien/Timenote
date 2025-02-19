@@ -28,7 +28,6 @@ public class ErrorHandlingTests
         {
             StartTime = new DateTime(2025, 01, 01, 09, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 08, 0, 0),
-            ProjectId = Guid.NewGuid()
         };
         
         // act & assert
@@ -49,14 +48,12 @@ public class ErrorHandlingTests
             new()
             {
                 Id = Guid.NewGuid(),
-                ProjectId = Guid.NewGuid(),
                 StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
                 EndTime = new DateTime(2025, 01, 01, 10, 0, 0),
             },
             new()
             {
                 Id = Guid.NewGuid(),
-                ProjectId = Guid.NewGuid(),
                 StartTime = new DateTime(2025, 01, 01, 10, 0, 0),
                 EndTime = new DateTime(2025, 01, 01, 12, 0, 0),
             }
@@ -65,7 +62,6 @@ public class ErrorHandlingTests
         var entry = new Entry()
         {
             Id = Guid.NewGuid(),
-            ProjectId = Guid.NewGuid(),
             StartTime = new DateTime(2025, 01, 01, 09, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 12, 0, 0),
         };

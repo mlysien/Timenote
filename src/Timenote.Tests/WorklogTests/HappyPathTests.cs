@@ -32,14 +32,12 @@ public class HappyPathTests
             new()
             {
                 Id = Guid.NewGuid(),
-                ProjectId = Guid.NewGuid(),
                 StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
                 EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
             },
             new()
             {
                 Id = Guid.NewGuid(),
-                ProjectId = Guid.NewGuid(),
                 StartTime = new DateTime(2025, 01, 01, 16, 0, 0),
                 EndTime = new DateTime(2025, 01, 01, 20, 0, 0),
             },
@@ -47,7 +45,6 @@ public class HappyPathTests
             new() 
             {
                 Id = Guid.NewGuid(),
-                ProjectId = Guid.NewGuid(),
                 StartTime = new DateTime(2025, 01, 2, 8, 0, 0),
                 EndTime = new DateTime(2025, 01, 2, 10, 0, 0),
             }

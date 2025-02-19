@@ -1,9 +1,10 @@
 ﻿using Timenote.Domain.Entities;
+using Timenote.Persistence.Context;
 using Timenote.Persistence.Repositories.Abstractions;
 
 namespace Timenote.Persistence.Repositories.Implementations;
 
-public class UserRepository : IUserRepository
+internal sealed class UserRepository(DatabaseContext context) : IUserRepository
 {
     public Task<User> AddAsync(User user)
     {
