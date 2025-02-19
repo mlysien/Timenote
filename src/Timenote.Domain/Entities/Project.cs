@@ -9,4 +9,8 @@ public sealed class Project : EntityBase
     public bool IsActive { get; init; }
     
     public IReadOnlyCollection<Worklog> Worklogs { get; init; }
+    
+    public Guid UserId { get; init; }
+    
+    public User User { get; init; } = null!;
 }

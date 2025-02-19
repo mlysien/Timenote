@@ -8,10 +8,8 @@ public sealed class Entry : EntityBase
     public DateTime StartTime { get; init; }
     
     public DateTime EndTime { get; init; }
-
-    public Guid ProjectId { get; init; }
     
-    public Guid WorklogId { get; init; }
-
-    public Worklog Worklog { get; init; }
+    public Guid  WorklogId { get; init; }
+    
+    public Worklog Worklog { get; init; } = null!;
 }

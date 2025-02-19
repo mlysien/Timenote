@@ -5,7 +5,13 @@
 /// </summary>
 public class Worklog : EntityBase
 {
-    public Guid ProjectId { get; set; }
-    public Project Project { get; set; }
-    public List<Entry> Entries { get; private set; } = new();
+    public int UserId { get; init; }
+    
+    public User User { get; init; } = null!;
+    
+    public Guid ProjectId { get; init; }
+    
+    public Project Project { get; init; } = null!;
+    
+    public IReadOnlyCollection<Entry> Entries { get; init; }
 }
