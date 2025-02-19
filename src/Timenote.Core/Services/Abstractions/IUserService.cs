@@ -7,4 +7,6 @@ public interface IUserService
     Task<User> CreateUserAsync(User user);
     
     Task<User> UpdateUserAsync(User user);
+    
+    Task RemoveUserAsync(User user);
 }

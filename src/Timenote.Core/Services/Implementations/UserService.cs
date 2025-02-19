@@ -21,4 +21,14 @@ public class UserService(IUserRepository userRepository) : IUserService
 
         throw new UserNotFoundException(user.Id);
     }
+
+    public async Task RemoveUserAsync(User user)
+    {
+        if (!await userRepository.ExistsAsync(user.Id))
+        {
+            throw new UserNotFoundException(user.Id);
+        }
+        
+        await userRepository.RemoveAsync(user.Id);
+    }
 }
