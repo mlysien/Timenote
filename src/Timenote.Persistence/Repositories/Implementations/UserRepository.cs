@@ -1,4 +1,5 @@
-﻿using Timenote.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Timenote.Domain.Entities;
 using Timenote.Persistence.Context;
 using Timenote.Persistence.Repositories.Abstractions;
 
@@ -6,23 +7,33 @@ namespace Timenote.Persistence.Repositories.Implementations;
 
 internal sealed class UserRepository(DatabaseContext context) : IUserRepository
 {
-    public Task<User> AddAsync(User user)
+    public async Task<User> AddAsync(User user)
     {
-        throw new NotImplementedException();
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
+        
+        return user;
     }
 
-    public Task<bool> ExistsAsync(Guid userId)
+    public async Task<bool> ExistsAsync(Guid userId)
     {
-        throw new NotImplementedException();
+        return await context.Users.AnyAsync(user => user.Id == userId);
     }
 
-    public Task<User> UpdateAsync(User user)
+    public async Task<User> UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+        context.Users.Update(user);
+        
+        await context.SaveChangesAsync();
+        
+        return user;
     }
 
-    public Task RemoveAsync(Guid userId)
+    public async Task RemoveAsync(Guid userId)
     {
-        throw new NotImplementedException();
+        var user = await context.Users.FindAsync(userId);
+        if (user != null) context.Users.Remove(user);
+
+        await context.SaveChangesAsync();
     }
 }
