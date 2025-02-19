@@ -119,4 +119,28 @@ public class FunctionalTests
         // assert
         _userRepositoryMock.Verify(r => r.RemoveAsync(user.Id), Times.Once);
     }
+    
+    [Test, Description("Removing not existed User should throw an exception")]
+    public void RemoveUser_WhenNotExists_ShouldThrowException()
+    {
+        // arrange
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = "John Doe",
+            Email = "john.doe@timenote.com"
+        };
+        
+        _userRepositoryMock.Setup(r => r.ExistsAsync(user.Id)).ReturnsAsync(false);
+        
+        // act
+        var exception = Assert.ThrowsAsync<UserNotFoundException>(() => _userService.RemoveUserAsync(user));
+
+        // Assert
+        Assert.That(exception, Is.Not.Null);
+        Assert.That(exception.Message, Is.Not.Empty);
+        Assert.That(exception.Message, Contains.Substring(user.Id.ToString()));
+        
+        _userRepositoryMock.Verify(r => r.RemoveAsync(user.Id), Times.Never);
+    }
 }
