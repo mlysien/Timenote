@@ -19,4 +19,9 @@ public class UserRepository : IUserRepository
     {
         throw new NotImplementedException();
     }
+
+    public Task RemoveAsync(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
 }
