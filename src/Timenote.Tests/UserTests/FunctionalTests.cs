@@ -99,4 +99,24 @@ public class FunctionalTests
         
         _userRepositoryMock.Verify(r => r.UpdateAsync(user), Times.Never);
     }
+    
+    [Test, Description("Removing existed User should remove User entity")]
+    public async Task RemoveUser_WhenExists_ShouldRemoveUserEntity()
+    {
+        // arrange
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            Name = "John Doe",
+            Email = "john.doe@timenote.com"
+        };
+        
+        _userRepositoryMock.Setup(r => r.ExistsAsync(user.Id)).ReturnsAsync(true);
+        
+        // act
+        await _userService.RemoveUserAsync(user);
+
+        // assert
+        _userRepositoryMock.Verify(r => r.RemoveAsync(user.Id), Times.Once);
+    }
 }
