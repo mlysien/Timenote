@@ -20,8 +20,8 @@ public class FunctionalTests
         _projectService = new ProjectService(_projectRepositoryMock.Object);
     }
 
-    [Test, Description("Adding a new Project entity to database")]
-    public async Task AddNewProjectShouldSaveInDatabase()
+    [Test, Description("Creating a new project should call Add method on repository")]
+    public async Task CreateProject_ShouldCallAddOnRepository()
     {
         // arrange
         var project = new Project
@@ -53,8 +53,8 @@ public class FunctionalTests
         _projectRepositoryMock.Verify(repository => repository.AddAsync(project), Times.Once);
     }
     
-    [Test, Description("Updating a new Project entity when exist should update existing project")]
-    public async Task UpdateProject_WhenExists_ShouldUpdateProject()
+    [Test, Description("Updating Project entity should call Update on Repository when project exists")]
+    public async Task UpdateProject_ShouldCallUpdateOnRepository_WhenProjectExists()
     {
         // Arrange
         var project = new Project
@@ -87,7 +87,7 @@ public class FunctionalTests
     }
     
     [Test, Description("Updating Project entity when Project doesn't exist throws an exception")]
-    public void UpdateProject_WhenNotExists_ShouldThrowException()
+    public void UpdateProject_ShouldThrowException_WhenProjectNotExists()
     {
         // Arrange
         var project = new Project
@@ -111,8 +111,8 @@ public class FunctionalTests
         _projectRepositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
     }
     
-    [Test, Description("Deleting Project entity should invoke delete method from repository")]
-    public void DeleteProject_WhenExists_ShouldDeleteProject()
+    [Test, Description("Deleting Project entity should call Delete method on repository")]
+    public void DeleteProject_ShouldCallDeleteOnRepository_WhenProjectExists()
     {
         // Arrange
         var project = new Project
@@ -133,9 +133,9 @@ public class FunctionalTests
     }    
     
     [Test, Description("Deleting Project entity when doesn't exist throws an exception")]
-    public void DeleteProject_WhenDoesntExists_ThrowsException()
+    public void DeleteProject_ShouldThrowException_WhenProjectNotExists()
     {
-        // Arrange
+        // arrange
         var project = new Project
         {
             Id = Guid.NewGuid(),
@@ -149,7 +149,7 @@ public class FunctionalTests
         // act
         var exception = Assert.ThrowsAsync<ProjectNotFoundException>(() => _projectService.DeleteProjectAsync(project));
 
-        // Assert
+        // assert
         Assert.That(exception, Is.Not.Null);
         Assert.That(exception.Message, Is.Not.Empty);
         Assert.That(exception.Message, Contains.Substring(project.Id.ToString()));
