@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Timenote.Shared.Common;
 using Timenote.Shared.Kernel;
 
 namespace Timenote.Shared.Messaging;
