@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Api", "Timenote.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Core", "Timenote.Core\Timenote.Core.csproj", "{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Application", "Timenote.Application\Timenote.Application.csproj", "{3DF9C7C5-727D-4F08-87F3-2252B101C374}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Shared", "Timenote.Shared\Timenote.Shared.csproj", "{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3FF3CB6-02A7-41B6-9510-EC3838D95AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DF9C7C5-727D-4F08-87F3-2252B101C374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DF9C7C5-727D-4F08-87F3-2252B101C374}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DF9C7C5-727D-4F08-87F3-2252B101C374}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DF9C7C5-727D-4F08-87F3-2252B101C374}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
