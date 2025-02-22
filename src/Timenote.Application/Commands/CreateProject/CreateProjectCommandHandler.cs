@@ -17,7 +17,13 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
             Budget = request.HoursBudget,
             IsActive = false
         };
-      
+
+        if (await projectRepository.ExistsAsync(project.Name))
+        {
+            // todo add specified error 
+            return Result.Failure<Guid>(Error.None);
+        }
+        
         await projectRepository.AddAsync(project);
         
         return project.Id;

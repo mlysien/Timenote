@@ -8,6 +8,8 @@ public interface IProjectRepository
     
     Task<bool> ExistsAsync(Guid projectId);
     
+    Task<bool> ExistsAsync(string projectName);
+    
     Task<Project> AddAsync(Project project);
     
     Task<Project> UpdateAsync(Project project);

@@ -18,7 +18,7 @@ public class Result
 
     protected static Result<TValue> Success<TValue>(TValue value) => new(value, true, Error.None);
     
-    protected static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
+    public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
 
 }
 

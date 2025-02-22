@@ -14,15 +14,17 @@ public class CreateProjectCommandHandlerTest
     {
         // arrange
         var repositoryMock = new Mock<IProjectRepository>();
-        var handler = new CreateProjectCommandHandler(repositoryMock.Object);
+        repositoryMock.Setup(r => r.ExistsAsync("New Project")).ReturnsAsync(false);
         var command = new CreateProjectCommand("New Project", 2400);
-
+        var handler = new CreateProjectCommandHandler(repositoryMock.Object);
+    
         // act
         var result = await handler.Handle(command, CancellationToken.None);
         
         // assert
-        repositoryMock.Verify(repo => repo.AddAsync(It.IsAny<Project>()), Times.Once);
-        
+        repositoryMock.Verify(r => r.AddAsync(It.IsAny<Project>()), Times.Once);
+        repositoryMock.Verify(r => r.ExistsAsync("New Project"), Times.Once);
+
         repositoryMock.Verify(repo 
             => repo.AddAsync(It.Is<Project>(p=>p.Name == "New Project")));
         

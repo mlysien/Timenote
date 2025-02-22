@@ -17,6 +17,11 @@ internal sealed class ProjectRepository(DatabaseContext context) : IProjectRepos
         return await context.Projects.AnyAsync(p => p.Id == projectId);
     }
 
+    public async Task<bool> ExistsAsync(string projectName)
+    {
+        return await context.Projects.AnyAsync(p => p.Name == projectName);
+    }
+
     public async Task<Project> AddAsync(Project project)
     {
         context.Projects.Add(project);
