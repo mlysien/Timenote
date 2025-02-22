@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Timenote.Shared.Kernel;
 
 namespace Timenote.Shared.Common;
 

@@ -1,6 +1,4 @@
-﻿using Timenote.Shared.Common;
-
-namespace Timenote.Shared.Kernel;
+﻿namespace Timenote.Shared.Common;
 
 public class Error
 {
