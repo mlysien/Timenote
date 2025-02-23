@@ -14,7 +14,7 @@ public class CreateProjectCommandHandlerTest
     {
         // arrange
         var repositoryMock = new Mock<IProjectRepository>();
-        repositoryMock.Setup(r => r.CodeExistsAsync("New Project")).ReturnsAsync(false);
+        repositoryMock.Setup(r => r.CodeExistsAsync("PROJECT.2025")).ReturnsAsync(false);
         var command = new CreateProjectCommand("PROJECT.2025", "New Project", 2400);
         var handler = new CreateProjectCommandHandler(repositoryMock.Object);
     
@@ -37,4 +37,24 @@ public class CreateProjectCommandHandlerTest
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.None));
     }
     
+    [Test]
+    public async Task Handle_ShouldFailure_WhenProjectAlreadyExists()
+    {
+        // arrange
+        var repositoryMock = new Mock<IProjectRepository>();
+        repositoryMock.Setup(r => r.CodeExistsAsync("PROJECT.2025")).ReturnsAsync(true);
+        var command = new CreateProjectCommand("PROJECT.2025", "New Project", 2400);
+        var handler = new CreateProjectCommandHandler(repositoryMock.Object);
+    
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+        
+        // assert
+        repositoryMock.Verify(r => r.AddAsync(It.IsAny<Project>()), Times.Never);
+        repositoryMock.Verify(r => r.CodeExistsAsync("PROJECT.2025"), Times.Once);
+        
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Error, Is.Not.Null);
+        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Conflict));
+    }
 }
