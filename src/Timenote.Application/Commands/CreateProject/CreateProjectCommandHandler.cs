@@ -20,8 +20,8 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
 
         if (await projectRepository.ExistsAsync(project.Name))
         {
-            // todo add specified error 
-            return Result.Failure<Guid>(Error.None);
+            return Result.Failure<Guid>(Error.Conflict("Project.NameAlreadyExists",
+                $"Project {project.Name} already exists"));
         }
         
         await projectRepository.AddAsync(project);

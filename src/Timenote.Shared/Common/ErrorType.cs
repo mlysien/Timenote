@@ -3,5 +3,6 @@
 public enum ErrorType
 {
     None = 0,
-    Failure = 1
+    Failure = 1,
+    Conflict = 2,
 }
