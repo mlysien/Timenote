@@ -73,7 +73,7 @@ public class FunctionalTests
             IsActive = true
         };
 
-        _projectRepositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
+        _projectRepositoryMock.Setup(r => r.CodeExistsAsync(project.Id)).ReturnsAsync(true);
         _projectRepositoryMock.Setup(repository => repository.UpdateAsync(projectUpdated)).ReturnsAsync(projectUpdated);
         
         // Act
@@ -98,7 +98,7 @@ public class FunctionalTests
             IsActive = true
         };
 
-        _projectRepositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(false);
+        _projectRepositoryMock.Setup(r => r.CodeExistsAsync(project.Id)).ReturnsAsync(false);
       
         // act
         var exception = Assert.ThrowsAsync<ProjectNotFoundException>(() => _projectService.UpdateProjectAsync(project));
@@ -123,7 +123,7 @@ public class FunctionalTests
             IsActive = true
         };
 
-        _projectRepositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
+        _projectRepositoryMock.Setup(r => r.CodeExistsAsync(project.Id)).ReturnsAsync(true);
       
         // act
         _projectService.DeleteProjectAsync(project);
@@ -144,7 +144,7 @@ public class FunctionalTests
             IsActive = true
         };
 
-        _projectRepositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(false);
+        _projectRepositoryMock.Setup(r => r.CodeExistsAsync(project.Id)).ReturnsAsync(false);
       
         // act
         var exception = Assert.ThrowsAsync<ProjectNotFoundException>(() => _projectService.DeleteProjectAsync(project));

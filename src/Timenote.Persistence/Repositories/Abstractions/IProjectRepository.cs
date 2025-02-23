@@ -6,9 +6,9 @@ public interface IProjectRepository
 {
     Task<Project> GetByIdAsync(Guid projectId);
     
-    Task<bool> ExistsAsync(Guid projectId);
+    Task<bool> CodeExistsAsync(Guid projectId);
     
-    Task<bool> ExistsAsync(string projectName);
+    Task<bool> CodeExistsAsync(string projectCode);
     
     Task<Project> AddAsync(Project project);
     

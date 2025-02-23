@@ -12,14 +12,14 @@ internal sealed class ProjectRepository(DatabaseContext context) : IProjectRepos
         return await context.Projects.FirstAsync(p => p.Id == projectId);
     }
 
-    public async Task<bool> ExistsAsync(Guid projectId)
+    public async Task<bool> CodeExistsAsync(Guid projectId)
     {
         return await context.Projects.AnyAsync(p => p.Id == projectId);
     }
 
-    public async Task<bool> ExistsAsync(string projectName)
+    public async Task<bool> CodeExistsAsync(string projectCode)
     {
-        return await context.Projects.AnyAsync(p => p.Name == projectName);
+        return await context.Projects.AnyAsync(p => p.Code == projectCode);
     }
 
     public async Task<Project> AddAsync(Project project)
