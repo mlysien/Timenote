@@ -2,4 +2,4 @@
 
 namespace Timenote.Application.Commands.CreateProject;
 
-public record CreateProjectCommand(string Name, long HoursBudget) : ICommand<Guid>;
+public record CreateProjectCommand(string Code, string Name, long HoursBudget) : ICommand<Guid>;

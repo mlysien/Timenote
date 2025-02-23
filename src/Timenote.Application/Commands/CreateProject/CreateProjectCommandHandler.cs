@@ -13,15 +13,16 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
         var project = new Project
         {
             Id = Guid.NewGuid(),
+            Code = request.Code,
             Name = request.Name,
             Budget = request.HoursBudget,
             IsActive = false
         };
 
-        if (await projectRepository.ExistsAsync(project.Name))
+        if (await projectRepository.CodeExistsAsync(project.Code))
         {
-            return Result.Failure<Guid>(Error.Conflict("Project.NameAlreadyExists",
-                $"Project {project.Name} already exists"));
+            return Result.Failure<Guid>(Error.Conflict("Project.CodeAlreadyExists",
+                $"Project with Code: '{project.Code}' already exists"));
         }
         
         await projectRepository.AddAsync(project);

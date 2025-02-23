@@ -14,8 +14,8 @@ public class CreateProjectCommandHandlerTest
     {
         // arrange
         var repositoryMock = new Mock<IProjectRepository>();
-        repositoryMock.Setup(r => r.ExistsAsync("New Project")).ReturnsAsync(false);
-        var command = new CreateProjectCommand("New Project", 2400);
+        repositoryMock.Setup(r => r.CodeExistsAsync("New Project")).ReturnsAsync(false);
+        var command = new CreateProjectCommand("PROJECT.2025", "New Project", 2400);
         var handler = new CreateProjectCommandHandler(repositoryMock.Object);
     
         // act
@@ -23,17 +23,18 @@ public class CreateProjectCommandHandlerTest
         
         // assert
         repositoryMock.Verify(r => r.AddAsync(It.IsAny<Project>()), Times.Once);
-        repositoryMock.Verify(r => r.ExistsAsync("New Project"), Times.Once);
+        repositoryMock.Verify(r => r.CodeExistsAsync("PROJECT.2025"), Times.Once);
+        
+        repositoryMock.Verify(repo
+            => repo.AddAsync(It.Is<Project>(p =>
+                p.Name == "New Project" &&
+                p.Code == "PROJECT.2025" &&
+                p.Budget == 2400)));
 
-        repositoryMock.Verify(repo 
-            => repo.AddAsync(It.Is<Project>(p=>p.Name == "New Project")));
-        
-        repositoryMock.Verify(repo 
-            => repo.AddAsync(It.Is<Project>(p=>p.Budget == 2400)));
-        
         Assert.That(result.IsSuccess, Is.True);
         Assert.That(result.Value, Is.Not.Empty);
         Assert.That(result.Value, Is.TypeOf<Guid>());
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.None));
     }
+    
 }
