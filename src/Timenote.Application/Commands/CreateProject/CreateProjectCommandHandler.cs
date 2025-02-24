@@ -10,23 +10,30 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
 {
     public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = new Project
+        try
         {
-            Id = Guid.NewGuid(),
-            Code = request.Code,
-            Name = request.Name,
-            Budget = request.HoursBudget,
-            IsActive = false
-        };
+            var project = new Project
+            {
+                Id = Guid.NewGuid(),
+                Code = request.Code,
+                Name = request.Name,
+                Budget = request.HoursBudget,
+                IsActive = false
+            };
 
-        if (await projectRepository.CodeExistsAsync(project.Code))
-        {
-            return Result.Failure<Guid>(Error.Conflict("Project.CodeAlreadyExists",
-                $"Project with Code: '{project.Code}' already exists"));
+            if (await projectRepository.CodeExistsAsync(project.Code))
+            {
+                return Result.Failure<Guid>(Error.Conflict("Project.CodeAlreadyExists",
+                    $"Project with Code: '{project.Code}' already exists"));
+            }
+        
+            await projectRepository.AddAsync(project);
+        
+            return project.Id;
         }
-        
-        await projectRepository.AddAsync(project);
-        
-        return project.Id;
+        catch (Exception e)
+        {
+            return Result.Failure<Guid>(new Error("Project.Failure", e.Message, ErrorType.Failure));
+        }
     }
 }

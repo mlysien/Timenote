@@ -1,6 +1,6 @@
 ﻿namespace Timenote.Shared.Common;
 
-public class Error
+public class Error(string code, string description, ErrorType type)
 {
     public static readonly Error None = new(string.Empty, string.Empty, ErrorType.None);
     public static readonly Error NullValue = new(
@@ -8,19 +8,12 @@ public class Error
         "Null value was provided",
         ErrorType.Failure);
 
-    public string Code { get; }
+    public string Code { get; } = code;
 
-    public string Description { get; }
+    public string Description { get; } = description;
 
-    public ErrorType Type { get; }
+    public ErrorType Type { get; } = type;
 
-    private Error(string code, string description, ErrorType type)
-    {
-        Code = code;
-        Description = description;
-        Type = type;
-    }  
-    
     public static Error Conflict(string code, string description) =>
         new(code, description, ErrorType.Conflict);
 }
