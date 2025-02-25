@@ -14,7 +14,7 @@ public sealed class ProjectService(IProjectRepository projectRepository) : IProj
 
     public async Task<Project> UpdateProjectAsync(Project project)
     {
-        if (await projectRepository.CodeExistsAsync(project.Id))
+        if (await projectRepository.ProjectExistsAsync(project.Id))
         {
             return await projectRepository.UpdateAsync(project);
         }
@@ -24,7 +24,7 @@ public sealed class ProjectService(IProjectRepository projectRepository) : IProj
 
     public async Task DeleteProjectAsync(Project project)
     {
-        if (await projectRepository.CodeExistsAsync(project.Id))
+        if (await projectRepository.ProjectExistsAsync(project.Id))
         {
             await projectRepository.DeleteAsync(project);
         }
