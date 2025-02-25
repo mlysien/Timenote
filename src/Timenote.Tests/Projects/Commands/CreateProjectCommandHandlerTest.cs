@@ -29,7 +29,7 @@ public class CreateProjectCommandHandlerTest
             => repo.AddAsync(It.Is<Project>(p =>
                 p.Name == "New Project" &&
                 p.Code == "PROJECT.2025" &&
-                p.Budget == 2400)));
+                p.HoursBudget == 2400)));
 
         Assert.That(result.IsSuccess, Is.True);
         Assert.That(result.Value, Is.Not.Empty);

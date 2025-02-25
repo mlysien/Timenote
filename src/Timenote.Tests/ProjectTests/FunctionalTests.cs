@@ -26,7 +26,7 @@ public class FunctionalTests
         // arrange
         var project = new Project
         {
-            Budget = 2000,
+            HoursBudget = 2000,
             Name = "Test project",
             IsActive = true
         };
@@ -35,7 +35,7 @@ public class FunctionalTests
             .AddAsync(project)).ReturnsAsync(new Project
             {
                 Id = Guid.NewGuid(),
-                Budget = project.Budget,
+                HoursBudget = project.HoursBudget,
                 Name = project.Name,
                 IsActive = project.IsActive,
                 Worklogs = project.Worklogs
@@ -48,7 +48,7 @@ public class FunctionalTests
         Assert.That(createdProject, Is.Not.Null);
         Assert.That(createdProject.Id, Is.Not.Empty);
         Assert.That(createdProject.Name, Is.EqualTo(project.Name));
-        Assert.That(createdProject.Budget, Is.EqualTo(project.Budget));
+        Assert.That(createdProject.HoursBudget, Is.EqualTo(project.HoursBudget));
         
         _projectRepositoryMock.Verify(repository => repository.AddAsync(project), Times.Once);
     }
@@ -61,7 +61,7 @@ public class FunctionalTests
         {
             Id = Guid.NewGuid(), 
             Name = "Project name",
-            Budget = 2000,
+            HoursBudget = 2000,
             IsActive = true
         };
         
@@ -69,11 +69,11 @@ public class FunctionalTests
         {
             Id = project.Id,
             Name = "Project name updated",
-            Budget = 4000,
+            HoursBudget = 4000,
             IsActive = true
         };
 
-        _projectRepositoryMock.Setup(r => r.CodeExistsAsync(project.Id)).ReturnsAsync(true);
+        _projectRepositoryMock.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
         _projectRepositoryMock.Setup(repository => repository.UpdateAsync(projectUpdated)).ReturnsAsync(projectUpdated);
         
         // Act
@@ -94,11 +94,11 @@ public class FunctionalTests
         {
             Id = Guid.NewGuid(),
             Name = "Project name updated",
-            Budget = 4000,
+            HoursBudget = 4000,
             IsActive = true
         };
 
-        _projectRepositoryMock.Setup(r => r.CodeExistsAsync(project.Id)).ReturnsAsync(false);
+        _projectRepositoryMock.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(false);
       
         // act
         var exception = Assert.ThrowsAsync<ProjectNotFoundException>(() => _projectService.UpdateProjectAsync(project));
@@ -119,11 +119,11 @@ public class FunctionalTests
         {
             Id = Guid.NewGuid(),
             Name = "Project name",
-            Budget = 4000,
+            HoursBudget = 4000,
             IsActive = true
         };
 
-        _projectRepositoryMock.Setup(r => r.CodeExistsAsync(project.Id)).ReturnsAsync(true);
+        _projectRepositoryMock.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
       
         // act
         _projectService.DeleteProjectAsync(project);
@@ -140,11 +140,11 @@ public class FunctionalTests
         {
             Id = Guid.NewGuid(),
             Name = "Project name",
-            Budget = 4000,
+            HoursBudget = 4000,
             IsActive = true
         };
 
-        _projectRepositoryMock.Setup(r => r.CodeExistsAsync(project.Id)).ReturnsAsync(false);
+        _projectRepositoryMock.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(false);
       
         // act
         var exception = Assert.ThrowsAsync<ProjectNotFoundException>(() => _projectService.DeleteProjectAsync(project));

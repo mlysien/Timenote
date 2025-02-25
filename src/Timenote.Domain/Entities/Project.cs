@@ -4,9 +4,9 @@ public sealed class Project : EntityBase
 {
     public string Code { get; init; } = string.Empty;
  
-    public string Name { get; init; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
-    public long Budget { get; init; }
+    public long HoursBudget { get; init; }
 
     public bool IsActive { get; init; }
     

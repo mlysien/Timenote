@@ -6,7 +6,7 @@ using Timenote.Shared.Messaging;
 namespace Timenote.Application.Commands.CreateProject;
 
 internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepository)
-    : ICommandHandler<CreateProjectCommand, Guid>
+    
 {
     public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
@@ -17,7 +17,7 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
                 Id = Guid.NewGuid(),
                 Code = request.Code,
                 Name = request.Name,
-                Budget = request.HoursBudget,
+                HoursBudget = request.HoursBudget,
                 IsActive = false
             };
 
