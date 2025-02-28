@@ -1,6 +1,8 @@
-﻿namespace Timenote.Domain.Entities;
+﻿using Timenote.Common.ValueObjects;
+
+namespace Timenote.Domain.Entities;
 
 public class EntityBase
 {
-    public Guid Id { get; init; }
+    public Unique Id { get; init; }
 }

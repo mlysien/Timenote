@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Timenote.Common.ValueObjects;
 using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
@@ -25,7 +26,7 @@ public class FunctionalTests
         // arrange
         var entry = new Entry
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
         };
@@ -43,7 +44,7 @@ public class FunctionalTests
         // arrange
         var entry = new Entry
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
         };
@@ -63,7 +64,7 @@ public class FunctionalTests
         // arrange
         var entry = new Entry
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
         };

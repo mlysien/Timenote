@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Timenote.Common.ValueObjects;
 using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
@@ -33,7 +34,7 @@ public class FunctionalTests
         _userRepositoryMock.Setup(repository => repository
             .AddAsync(user)).ReturnsAsync(new User
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Name = "John Doe",
             Email = "john.doe@timenote.com",
         });
@@ -43,7 +44,7 @@ public class FunctionalTests
         
         // assert
         Assert.That(createdUser, Is.Not.Null);
-        Assert.That(createdUser.Id, Is.Not.Empty);
+        Assert.That((Guid)createdUser.Id, Is.Not.Empty);
         Assert.That(createdUser.Name, Is.EqualTo(user.Name));
         Assert.That(createdUser.Email, Is.EqualTo(user.Email));
         
@@ -56,7 +57,7 @@ public class FunctionalTests
         // arrange
         var user = new User
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Name = "John Doe",
             Email = "john.doe@timenote.com"
         };
@@ -81,7 +82,7 @@ public class FunctionalTests
         // arrange
         var user = new User
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Name = "John Doe",
             Email = "john.doe@timenote.com"
         };
@@ -106,7 +107,7 @@ public class FunctionalTests
         // arrange
         var user = new User
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Name = "John Doe",
             Email = "john.doe@timenote.com"
         };
@@ -126,7 +127,7 @@ public class FunctionalTests
         // arrange
         var user = new User
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Name = "John Doe",
             Email = "john.doe@timenote.com"
         };

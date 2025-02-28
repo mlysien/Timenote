@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Timenote.Application.Projects.Commands.UpdateProjectName;
+using Timenote.Common.ValueObjects;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Exceptions;
 using Timenote.Persistence.Repositories.Abstractions;
@@ -16,7 +17,7 @@ public class UpdateProjectNameCommandHandlerTest
         // arrange
         var project = new Project
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Code = "PROJECT.CODE",
             Name = "Test Project",
             HoursBudget = 2400
@@ -35,8 +36,8 @@ public class UpdateProjectNameCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(It.Is<Project>(p => p.Name == "Updated Project")), Times.Once);
         
         Assert.That(result.IsSuccess, Is.True);
-        Assert.That(result.Value, Is.Not.Empty);
-        Assert.That(result.Value, Is.TypeOf<Guid>());
+        Assert.That(result.Value, Is.TypeOf<Unique>());
+        Assert.That((Guid)result.Value, Is.Not.EqualTo(Guid.Empty));
         Assert.That(result.Value, Is.EqualTo(project.Id));
     }
     
@@ -46,7 +47,7 @@ public class UpdateProjectNameCommandHandlerTest
         // arrange
         var project = new Project
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Code = "PROJECT.CODE",
             Name = "Test Project",
             HoursBudget = 2400

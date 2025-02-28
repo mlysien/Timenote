@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Timenote.Application.Projects.Commands.CreateProject;
+using Timenote.Common.ValueObjects;
 using Timenote.Domain.Entities;
 using Timenote.Persistence.Repositories.Abstractions;
 using Timenote.Shared.Common;
@@ -32,8 +33,8 @@ public class CreateProjectCommandHandlerTest
                 p.HoursBudget == 2400)));
 
         Assert.That(result.IsSuccess, Is.True);
-        Assert.That(result.Value, Is.Not.Empty);
-        Assert.That(result.Value, Is.TypeOf<Guid>());
+        Assert.That(result.Value, Is.TypeOf<Unique>());
+        Assert.That((Guid)result.Value, Is.Not.EqualTo(Guid.Empty));
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.None));
     }
     

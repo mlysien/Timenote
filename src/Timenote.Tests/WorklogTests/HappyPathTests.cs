@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
+using Timenote.Common.ValueObjects;
 using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
@@ -31,20 +32,20 @@ public class HappyPathTests
         {
             new()
             {
-                Id = Guid.NewGuid(),
+                Id = new Unique(Guid.NewGuid()),
                 StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
                 EndTime = new DateTime(2025, 01, 01, 16, 0, 0),
             },
             new()
             {
-                Id = Guid.NewGuid(),
+                Id = new Unique(Guid.NewGuid()),
                 StartTime = new DateTime(2025, 01, 01, 16, 0, 0),
                 EndTime = new DateTime(2025, 01, 01, 20, 0, 0),
             },
             // this entry should not be calculated
             new() 
             {
-                Id = Guid.NewGuid(),
+                Id = new Unique(Guid.NewGuid()),
                 StartTime = new DateTime(2025, 01, 2, 8, 0, 0),
                 EndTime = new DateTime(2025, 01, 2, 10, 0, 0),
             }

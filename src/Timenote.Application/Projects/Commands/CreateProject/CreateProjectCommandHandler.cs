@@ -1,4 +1,5 @@
-﻿using Timenote.Domain.Entities;
+﻿using Timenote.Common.ValueObjects;
+using Timenote.Domain.Entities;
 using Timenote.Persistence.Repositories.Abstractions;
 using Timenote.Shared.Common;
 
@@ -7,13 +8,13 @@ namespace Timenote.Application.Projects.Commands.CreateProject;
 internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepository)
     
 {
-    public async Task<Result<Guid>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unique>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
         try
         {
             var project = new Project
             {
-                Id = Guid.NewGuid(),
+                Id = new Unique(Guid.NewGuid()),
                 Code = request.Code,
                 Name = request.Name,
                 HoursBudget = request.HoursBudget,
@@ -22,7 +23,7 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
 
             if (await projectRepository.CodeExistsAsync(project.Code))
             {
-                return Result.Failure<Guid>(Error.Conflict("Project.CodeAlreadyExists",
+                return Result.Failure<Unique>(Error.Conflict("Project.CodeAlreadyExists",
                     $"Project with Code: '{project.Code}' already exists"));
             }
         
@@ -32,7 +33,7 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
         }
         catch (Exception e)
         {
-            return Result.Failure<Guid>(new Error("Project.Failure", e.Message, ErrorType.Failure));
+            return Result.Failure<Unique>(new Error("Project.Failure", e.Message, ErrorType.Failure));
         }
     }
 }

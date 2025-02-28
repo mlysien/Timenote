@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Timenote.Common.ValueObjects;
 using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
@@ -34,7 +35,7 @@ public class FunctionalTests
         _projectRepositoryMock.Setup(repository => repository
             .AddAsync(project)).ReturnsAsync(new Project
             {
-                Id = Guid.NewGuid(),
+                Id = new Unique(Guid.NewGuid()),
                 HoursBudget = project.HoursBudget,
                 Name = project.Name,
                 IsActive = project.IsActive,
@@ -46,7 +47,7 @@ public class FunctionalTests
         
         // assert
         Assert.That(createdProject, Is.Not.Null);
-        Assert.That(createdProject.Id, Is.Not.Empty);
+        Assert.That(createdProject.Id, Is.TypeOf<Unique>());
         Assert.That(createdProject.Name, Is.EqualTo(project.Name));
         Assert.That(createdProject.HoursBudget, Is.EqualTo(project.HoursBudget));
         
@@ -59,7 +60,7 @@ public class FunctionalTests
         // Arrange
         var project = new Project
         {
-            Id = Guid.NewGuid(), 
+            Id = new Unique(Guid.NewGuid()), 
             Name = "Project name",
             HoursBudget = 2000,
             IsActive = true
@@ -92,7 +93,7 @@ public class FunctionalTests
         // Arrange
         var project = new Project
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Name = "Project name updated",
             HoursBudget = 4000,
             IsActive = true
@@ -117,7 +118,7 @@ public class FunctionalTests
         // Arrange
         var project = new Project
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Name = "Project name",
             HoursBudget = 4000,
             IsActive = true
@@ -138,7 +139,7 @@ public class FunctionalTests
         // arrange
         var project = new Project
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             Name = "Project name",
             HoursBudget = 4000,
             IsActive = true

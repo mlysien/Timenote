@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Timenote.Common.ValueObjects;
 using Timenote.Core.Services.Abstractions;
 using Timenote.Core.Services.Implementations;
 using Timenote.Domain.Entities;
@@ -47,13 +48,13 @@ public class ErrorHandlingTests
         {
             new()
             {
-                Id = Guid.NewGuid(),
+                Id = new Unique(Guid.NewGuid()),
                 StartTime = new DateTime(2025, 01, 01, 08, 0, 0),
                 EndTime = new DateTime(2025, 01, 01, 10, 0, 0),
             },
             new()
             {
-                Id = Guid.NewGuid(),
+                Id = new Unique(Guid.NewGuid()),
                 StartTime = new DateTime(2025, 01, 01, 10, 0, 0),
                 EndTime = new DateTime(2025, 01, 01, 12, 0, 0),
             }
@@ -61,7 +62,7 @@ public class ErrorHandlingTests
 
         var entry = new Entry()
         {
-            Id = Guid.NewGuid(),
+            Id = new Unique(Guid.NewGuid()),
             StartTime = new DateTime(2025, 01, 01, 09, 0, 0),
             EndTime = new DateTime(2025, 01, 01, 12, 0, 0),
         };
