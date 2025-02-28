@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Application", "Tim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Shared", "Timenote.Shared\Timenote.Shared.csproj", "{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Common", "Timenote.Common\Timenote.Common.csproj", "{D584CF32-34FA-473A-98BB-8FA8E281E60F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD53A549-676A-4D32-A2C0-0CC3A54EAD93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D584CF32-34FA-473A-98BB-8FA8E281E60F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D584CF32-34FA-473A-98BB-8FA8E281E60F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D584CF32-34FA-473A-98BB-8FA8E281E60F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D584CF32-34FA-473A-98BB-8FA8E281E60F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
