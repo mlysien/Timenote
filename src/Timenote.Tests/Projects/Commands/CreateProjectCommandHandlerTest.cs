@@ -1,5 +1,5 @@
 ﻿using Moq;
-using Timenote.Application.Commands.CreateProject;
+using Timenote.Application.Projects.Commands.CreateProject;
 using Timenote.Domain.Entities;
 using Timenote.Persistence.Repositories.Abstractions;
 using Timenote.Shared.Common;

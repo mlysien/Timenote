@@ -19,4 +19,8 @@
         <InternalsVisibleTo Include="Timenote.Tests" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Projects\" />
+    </ItemGroup>
+
 </Project>

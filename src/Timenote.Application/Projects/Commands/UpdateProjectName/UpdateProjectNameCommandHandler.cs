@@ -3,7 +3,7 @@ using Timenote.Persistence.Repositories.Abstractions;
 using Timenote.Shared.Common;
 using Timenote.Shared.Messaging;
 
-namespace Timenote.Application.Commands.UpdateProjectName;
+namespace Timenote.Application.Projects.Commands.UpdateProjectName;
 
 public class UpdateProjectNameCommandHandler(IProjectRepository projectRepository) 
     : ICommandHandler<UpdateProjectNameCommand, Guid>

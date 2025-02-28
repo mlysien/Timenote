@@ -1,5 +1,5 @@
 ﻿using Moq;
-using Timenote.Application.Commands.UpdateProjectName;
+using Timenote.Application.Projects.Commands.UpdateProjectName;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Exceptions;
 using Timenote.Persistence.Repositories.Abstractions;
