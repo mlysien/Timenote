@@ -70,4 +70,27 @@ public class UpdateProjectNameCommandHandlerTest
         Assert.That(result.Error, Is.Not.Null);
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.NotFound));
     }
+    
+    [Test]
+    public async Task Handle_ShouldReturnFailure_WhenRepositoryThrowsException()
+    {    
+        // arrange
+        var repositoryMock = new Mock<IProjectRepository>();
+        repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(new Project());
+        repositoryMock.Setup(r => r.UpdateAsync(It.IsAny<Project>())).ThrowsAsync(It.IsAny<Exception>());
+        
+        var command = new UpdateProjectNameCommand(new Unique(Guid.NewGuid()), "New Project");
+        var handler = new UpdateProjectNameCommandHandler(repositoryMock.Object);
+    
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+        
+        // assert
+        repositoryMock.Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Once);
+        repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Project>()), Times.Once);
+        
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Error, Is.Not.Null);
+        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Failure));
+    }
 }

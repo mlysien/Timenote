@@ -13,7 +13,6 @@ public class UpdateProjectNameCommandHandler(IProjectRepository projectRepositor
     {
         try
         {
-
             var project = await projectRepository.GetByIdAsync(request.ProjectId);
 
             if (project == null)
@@ -24,13 +23,16 @@ public class UpdateProjectNameCommandHandler(IProjectRepository projectRepositor
             project.Name = request.ProjectName;
 
             await projectRepository.UpdateAsync(project);
-            
+
             return project.Id;
         }
         catch (ProjectNotFoundException e)
         {
             return Result.Failure<Unique>(new Error("Project.NotFound", e.Message, ErrorType.NotFound));
         }
-
+        catch (Exception e)
+        {
+            return Result.Failure<Unique>(new Error("Project.Failure", e.Message, ErrorType.Failure));
+        }
     }
 }
