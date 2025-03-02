@@ -6,7 +6,7 @@ public sealed class Project : EntityBase
  
     public string Name { get; set; } = string.Empty;
 
-    public long HoursBudget { get; init; }
+    public decimal HoursBudget { get; set; }
 
     public bool IsActive { get; init; }
     
