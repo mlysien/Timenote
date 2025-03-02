@@ -2,11 +2,12 @@
 using Timenote.Domain.Entities;
 using Timenote.Persistence.Repositories.Abstractions;
 using Timenote.Shared.Common;
+using Timenote.Shared.Messaging;
 
 namespace Timenote.Application.Projects.Commands.CreateProject;
 
-internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepository)
-    
+internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepository)     
+    : ICommandHandler<CreateProjectCommand, Unique>
 {
     public async Task<Result<Unique>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
