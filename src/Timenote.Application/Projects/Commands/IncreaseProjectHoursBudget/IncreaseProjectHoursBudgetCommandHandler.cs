@@ -21,14 +21,18 @@ internal sealed class IncreaseProjectHoursBudgetCommandHandler(IProjectRepositor
             }
 
             project.HoursBudget = request.NewHoursBudget;
-        
+
             await repository.UpdateAsync(project);
-        
+
             return project.Id;
         }
         catch (ProjectNotFoundException notFoundException)
         {
             return Result.Failure<Unique>(new Error("Project.NotFound", notFoundException.Message, ErrorType.NotFound));
+        }
+        catch (Exception exception)
+        {
+            return Result.Failure<Unique>(new Error("Project.Failure", exception.Message, ErrorType.Failure));
         }
     }
 }

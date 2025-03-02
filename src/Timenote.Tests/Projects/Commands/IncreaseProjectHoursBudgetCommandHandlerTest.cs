@@ -74,7 +74,41 @@ public class IncreaseProjectHoursBudgetCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
       
         Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error, Is.Not.Null);
+        Assert.That(result.Error.Description, Is.Not.Null);
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.NotFound));
+    }
+    
+    [Test]
+    public async Task Handle_ShouldFailure_WhenRepositoryThrowException()
+    {
+        // arrange
+        const decimal newHoursBudget = 2500;
+        
+        var project = new Project
+        {
+            Id = new Unique(Guid.NewGuid()),
+            Name = "Test Project",
+            Code = "PROJECT.2025",
+            HoursBudget = 2000
+        };
+        
+        var repositoryMock = new Mock<IProjectRepository>();
+
+        repositoryMock.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
+        repositoryMock.Setup(r => r.UpdateAsync(project)).ThrowsAsync(new Exception());
+        
+        var command = new IncreaseProjectHoursBudgetCommand(project.Id, newHoursBudget);
+        var handler = new IncreaseProjectHoursBudgetCommandHandler(repositoryMock.Object);
+    
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+        
+        // assert
+        repositoryMock.Verify(r => r.GetByIdAsync(project.Id), Times.Once);
+        repositoryMock.Verify(r => r.UpdateAsync(project), Times.Once);
+      
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Error.Description, Is.Not.Null);
+        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Failure));
     }
 }
