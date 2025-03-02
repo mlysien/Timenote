@@ -1,0 +1,47 @@
+﻿using Moq;
+using Timenote.Application.Projects.Commands.IncreaseProjectHoursBudget;
+using Timenote.Common.ValueObjects;
+using Timenote.Domain.Entities;
+using Timenote.Persistence.Repositories.Abstractions;
+using Timenote.Shared.Common;
+
+namespace Timenote.Tests.Projects.Commands;
+
+[TestFixture]
+public class IncreaseProjectHoursBudgetCommandHandlerTest
+{
+    [Test]
+    public async Task Handle_ShouldCallUpdateOnRepository_WhenProjectExists()
+    {
+        // arrange
+        const decimal newHoursBudget = 2500;
+        
+        var project = new Project
+        {
+            Id = new Unique(Guid.NewGuid()),
+            Name = "Test Project",
+            Code = "PROJECT.2025",
+            HoursBudget = 2000
+        };
+        
+        var repositoryMock = new Mock<IProjectRepository>();
+        
+        repositoryMock.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
+        
+        var command = new IncreaseProjectHoursBudgetCommand(project.Id, newHoursBudget);
+        var handler = new IncreaseProjectHoursBudgetCommandHandler(repositoryMock.Object);
+    
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+        
+        // assert
+        repositoryMock.Verify(r => r.GetByIdAsync(project.Id), Times.Once);
+        repositoryMock.Verify(r => r.UpdateAsync(project), Times.Once);
+        repositoryMock.Verify(r=> r.UpdateAsync(It.Is<Project>(p => p.HoursBudget == newHoursBudget)), Times.Once);
+        
+        Assert.That(result.IsSuccess, Is.True);
+        Assert.That(result.Value, Is.TypeOf<Unique>());
+        Assert.That((Guid)result.Value, Is.Not.EqualTo(Guid.Empty));
+        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.None));
+    }
+}
