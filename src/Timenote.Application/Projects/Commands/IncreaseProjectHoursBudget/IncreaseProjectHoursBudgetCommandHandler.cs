@@ -20,6 +20,11 @@ internal sealed class IncreaseProjectHoursBudgetCommandHandler(IProjectRepositor
                 throw new ProjectNotFoundException(request.ProjectId);
             }
 
+            if (request.NewHoursBudget < project.HoursBudget)
+            {
+                throw new ProjectInvalidHoursBudgetException("New hours budget cannot be less than the current");
+            }
+            
             project.HoursBudget = request.NewHoursBudget;
 
             await repository.UpdateAsync(project);
@@ -29,6 +34,10 @@ internal sealed class IncreaseProjectHoursBudgetCommandHandler(IProjectRepositor
         catch (ProjectNotFoundException notFoundException)
         {
             return Result.Failure<Unique>(new Error("Project.NotFound", notFoundException.Message, ErrorType.NotFound));
+        }
+        catch (ProjectInvalidHoursBudgetException budgetHoursException)
+        {
+            return Result.Failure<Unique>(new Error("Project.Conflict", budgetHoursException.Message, ErrorType.Conflict));
         }
         catch (Exception exception)
         {

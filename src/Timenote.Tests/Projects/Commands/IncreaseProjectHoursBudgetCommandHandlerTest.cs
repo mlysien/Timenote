@@ -111,4 +111,37 @@ public class IncreaseProjectHoursBudgetCommandHandlerTest
         Assert.That(result.Error.Description, Is.Not.Null);
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Failure));
     }
+
+    [Test]
+    public async Task Handle_ShouldReturnFailure_WhenIncreasedHoursAreLessThanCurrent()
+    {
+        // arrange
+        const decimal newHoursBudget = 1000;
+        
+        var project = new Project
+        {
+            Id = new Unique(Guid.NewGuid()),
+            Name = "Test Project",
+            Code = "PROJECT.2025",
+            HoursBudget = 2000
+        };
+        
+        var repositoryMock = new Mock<IProjectRepository>();
+
+        repositoryMock.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
+        
+        var command = new IncreaseProjectHoursBudgetCommand(project.Id, newHoursBudget);
+        var handler = new IncreaseProjectHoursBudgetCommandHandler(repositoryMock.Object);
+    
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+        
+        // assert
+        repositoryMock.Verify(r => r.GetByIdAsync(project.Id), Times.Once);
+        repositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
+      
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Error.Description, Is.Not.Null);
+        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Conflict));
+    }
 }
