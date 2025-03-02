@@ -11,17 +11,24 @@ internal sealed class IncreaseProjectHoursBudgetCommandHandler(IProjectRepositor
 {
     public async Task<Result<Unique>> Handle(IncreaseProjectHoursBudgetCommand request, CancellationToken cancellationToken)
     {
-        var project = await repository.GetByIdAsync(request.ProjectId);
-
-        if (project == null)
+        try
         {
-            throw new ProjectNotFoundException(request.ProjectId);
-        }
+            var project = await repository.GetByIdAsync(request.ProjectId);
 
-        project.HoursBudget = request.NewHoursBudget;
+            if (project == null)
+            {
+                throw new ProjectNotFoundException(request.ProjectId);
+            }
+
+            project.HoursBudget = request.NewHoursBudget;
         
-        await repository.UpdateAsync(project);
+            await repository.UpdateAsync(project);
         
-        return project.Id;
+            return project.Id;
+        }
+        catch (ProjectNotFoundException notFoundException)
+        {
+            return Result.Failure<Unique>(new Error("Project.NotFound", notFoundException.Message, ErrorType.NotFound));
+        }
     }
 }
