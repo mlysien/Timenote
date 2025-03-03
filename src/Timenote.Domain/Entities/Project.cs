@@ -8,6 +8,8 @@ public sealed class Project : EntityBase
 
     public decimal HoursBudget { get; set; }
 
+    public decimal BurnedHours { get; set; }
+    
     public bool IsActive { get; init; }
     
     public IReadOnlyCollection<Worklog> Worklogs { get; init; }
