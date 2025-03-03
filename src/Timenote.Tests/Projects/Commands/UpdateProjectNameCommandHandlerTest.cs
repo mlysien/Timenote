@@ -1,8 +1,8 @@
 ﻿using Moq;
 using Timenote.Application.Projects.Commands.UpdateProjectName;
-using Timenote.Common.ValueObjects;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Exceptions;
+using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Repositories.Abstractions;
 using Timenote.Shared.Common;
 

@@ -1,5 +1,5 @@
-﻿using Timenote.Common.ValueObjects;
-using Timenote.Domain.Entities;
+﻿using Timenote.Domain.Entities;
+using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Repositories.Abstractions;
 using Timenote.Shared.Common;
 using Timenote.Shared.Messaging;

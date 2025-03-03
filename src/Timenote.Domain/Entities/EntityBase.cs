@@ -1,4 +1,4 @@
-﻿using Timenote.Common.ValueObjects;
+﻿using Timenote.Domain.ValueObjects;
 
 namespace Timenote.Domain.Entities;
 

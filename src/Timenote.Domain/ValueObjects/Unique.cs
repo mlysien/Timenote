@@ -1,4 +1,4 @@
-﻿namespace Timenote.Common.ValueObjects;
+﻿namespace Timenote.Domain.ValueObjects;
 
 /// <summary>
 /// Unique identifier for entities
