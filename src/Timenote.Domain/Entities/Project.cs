@@ -16,5 +16,5 @@ public sealed class Project : EntityBase
     
     public Guid UserId { get; init; }
     
-    public User User { get; init; } = null!;
+    public User User { get; set; } = null!;
 }
