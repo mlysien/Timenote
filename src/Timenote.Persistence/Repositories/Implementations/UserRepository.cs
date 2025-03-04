@@ -36,4 +36,9 @@ internal sealed class UserRepository(DatabaseContext context) : IUserRepository
 
         await context.SaveChangesAsync();
     }
+
+    public async Task<User> GetByIdAsync(Guid userId)
+    {
+        return await context.Users.FindAsync(userId);
+    }
 }
