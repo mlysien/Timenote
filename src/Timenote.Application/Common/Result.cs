@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Timenote.Shared.Common;
+namespace Timenote.Application.Common;
 
 public class Result
 {

@@ -1,6 +1,5 @@
-﻿using Timenote.Domain.ValueObjects;
-
-using Timenote.Shared.Messaging;
+﻿using Timenote.Application.Messaging;
+using Timenote.Domain.ValueObjects;
 
 namespace Timenote.Application.Projects.Commands.AssignUser;
 

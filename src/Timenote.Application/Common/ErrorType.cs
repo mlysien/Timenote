@@ -1,4 +1,4 @@
-﻿namespace Timenote.Shared.Common;
+﻿namespace Timenote.Application.Common;
 
 public enum ErrorType
 {

@@ -12,7 +12,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Timenote.Persistence\Timenote.Persistence.csproj" />
-      <ProjectReference Include="..\Timenote.Shared\Timenote.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

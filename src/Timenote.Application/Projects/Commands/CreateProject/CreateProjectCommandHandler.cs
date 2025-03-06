@@ -1,8 +1,8 @@
-﻿using Timenote.Domain.Entities;
+﻿using Timenote.Application.Common;
+using Timenote.Application.Messaging;
+using Timenote.Domain.Entities;
 using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Repositories.Abstractions;
-using Timenote.Shared.Common;
-using Timenote.Shared.Messaging;
 
 namespace Timenote.Application.Projects.Commands.CreateProject;
 

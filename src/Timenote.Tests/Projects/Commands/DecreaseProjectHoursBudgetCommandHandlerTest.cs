@@ -1,9 +1,9 @@
 ﻿using Moq;
+using Timenote.Application.Common;
 using Timenote.Application.Projects.Commands.DecreaseProjectHoursBudget;
 using Timenote.Domain.Entities;
 using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Repositories.Abstractions;
-using Timenote.Shared.Common;
 
 namespace Timenote.Tests.Projects.Commands;
 

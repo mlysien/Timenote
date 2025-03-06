@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using Timenote.Shared.Common;
+using Timenote.Application.Common;
 
-namespace Timenote.Shared.Messaging;
+namespace Timenote.Application.Messaging;
 
 public interface ICommand : IRequest<Result>, IBaseCommand;
 
