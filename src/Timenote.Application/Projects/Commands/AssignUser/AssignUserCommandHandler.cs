@@ -12,22 +12,41 @@ internal sealed class AssignUserCommandHandler(
 {
     public async Task<Result> Handle(AssignUserCommand request, CancellationToken cancellationToken)
     {
-        if (!await userRepository.ExistsAsync(request.UserId))
+        try
         {
-            throw new UserNotFoundException(request.UserId);
-        }
 
-        if (!await projectRepository.ProjectExistsAsync(request.ProjectId))
+            if (!await userRepository.ExistsAsync(request.UserId))
+            {
+                throw new UserNotFoundException(request.UserId);
+            }
+
+            if (!await projectRepository.ProjectExistsAsync(request.ProjectId))
+            {
+                throw new ProjectNotFoundException(request.ProjectId);
+            }
+
+            var project = await projectRepository.GetByIdAsync(request.ProjectId);
+            var user = await userRepository.GetByIdAsync(request.UserId);
+
+            if (project.User != null && project.User.Id == user.Id)
+            {
+                throw new UserAlreadyAssignedException(user.Id);
+            }
+
+            project.User = user;
+
+            await projectRepository.UpdateAsync(project);
+
+            return Result.Success();
+
+        }
+        catch (UserAlreadyAssignedException e)
         {
-            throw new ProjectNotFoundException(request.ProjectId);
+            return Result.Failure(new Error("AssignUser.Conflict", e.Message, ErrorType.Conflict));
         }
-     
-        var project = await projectRepository.GetByIdAsync(request.ProjectId);
-        var user = await userRepository.GetByIdAsync(request.UserId);
-        project.User = user;
-        
-        await projectRepository.UpdateAsync(project);
-
-        return Result.Success();
+        catch (Exception e)
+        {
+            return Result.Failure(new Error("AssignUser.Failure", e.Message, ErrorType.Failure));
+        }
     }
 }
