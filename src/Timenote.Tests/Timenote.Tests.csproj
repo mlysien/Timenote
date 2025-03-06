@@ -23,7 +23,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Timenote.Application\Timenote.Application.csproj" />
-      <ProjectReference Include="..\Timenote.Core\Timenote.Core.csproj" />
       <ProjectReference Include="..\Timenote.Domain\Timenote.Domain.csproj" />
     </ItemGroup>
 
