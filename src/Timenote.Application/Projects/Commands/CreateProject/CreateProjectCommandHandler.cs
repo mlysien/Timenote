@@ -24,8 +24,7 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
 
             if (await projectRepository.CodeExistsAsync(project.Code))
             {
-                return Result.Failure<Unique>(Error.Conflict("Project.CodeAlreadyExists",
-                    $"Project with Code: '{project.Code}' already exists"));
+                return Result.Failure<Unique>(Error.Conflict($"Project with Code: '{project.Code}' already exists"));
             }
         
             await projectRepository.AddAsync(project);
@@ -34,7 +33,7 @@ internal sealed class CreateProjectCommandHandler(IProjectRepository projectRepo
         }
         catch (Exception e)
         {
-            return Result.Failure<Unique>(new Error("Project.Failure", e.Message, ErrorType.Failure));
+            return Result.Failure<Unique>(new Error(ErrorType.Failure, e.Message));
         }
     }
 }

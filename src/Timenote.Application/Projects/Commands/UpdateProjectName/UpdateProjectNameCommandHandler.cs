@@ -28,11 +28,11 @@ public class UpdateProjectNameCommandHandler(IProjectRepository projectRepositor
         }
         catch (ProjectNotFoundException e)
         {
-            return Result.Failure<Unique>(new Error("Project.NotFound", e.Message, ErrorType.NotFound));
+            return Result.Failure<Unique>(new Error(ErrorType.NotFound, e.Message));
         }
         catch (Exception e)
         {
-            return Result.Failure<Unique>(new Error("Project.Failure", e.Message, ErrorType.Failure));
+            return Result.Failure<Unique>(new Error(ErrorType.Failure, e.Message));
         }
     }
 }

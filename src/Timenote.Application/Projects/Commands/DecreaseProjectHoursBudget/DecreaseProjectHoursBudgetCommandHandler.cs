@@ -39,15 +39,15 @@ internal sealed class DecreaseProjectHoursBudgetCommandHandler(IProjectRepositor
         }
         catch (ProjectNotFoundException notFoundException)
         {
-            return Result.Failure<Unique>(new Error("Project.NotFound", notFoundException.Message, ErrorType.NotFound));
+            return Result.Failure<Unique>(new Error(ErrorType.NotFound, notFoundException.Message));
         }
         catch (ProjectInvalidHoursBudgetException budgetHoursException)
         {
-            return Result.Failure<Unique>(new Error("Project.Conflict", budgetHoursException.Message, ErrorType.Conflict));
+            return Result.Failure<Unique>(new Error(ErrorType.Conflict, budgetHoursException.Message));
         }
         catch (Exception exception)
         {
-            return Result.Failure<Unique>(new Error("Project.Failure", exception.Message, ErrorType.Failure));
+            return Result.Failure<Unique>(new Error(ErrorType.Failure, exception.Message));
         }
     }
 }

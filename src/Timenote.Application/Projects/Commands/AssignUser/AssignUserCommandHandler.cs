@@ -42,11 +42,11 @@ internal sealed class AssignUserCommandHandler(
         }
         catch (UserAlreadyAssignedException e)
         {
-            return Result.Failure(new Error("AssignUser.Conflict", e.Message, ErrorType.Conflict));
+            return Result.Failure(new Error(ErrorType.Conflict, e.Message));
         }
         catch (Exception e)
         {
-            return Result.Failure(new Error("AssignUser.Failure", e.Message, ErrorType.Failure));
+            return Result.Failure(new Error(ErrorType.Failure, e.Message));
         }
     }
 }
