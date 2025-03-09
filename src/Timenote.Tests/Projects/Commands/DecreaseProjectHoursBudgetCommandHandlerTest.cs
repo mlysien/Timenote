@@ -74,7 +74,7 @@ public class DecreaseProjectHoursBudgetCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
       
         Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Description, Is.Not.Null);
+        Assert.That(result.Error.Message, Is.Not.Null);
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.NotFound));
     }
     
@@ -108,7 +108,7 @@ public class DecreaseProjectHoursBudgetCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(project), Times.Once);
       
         Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Description, Is.Not.Null);
+        Assert.That(result.Error.Message, Is.Not.Null);
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Failure));
     }
     
@@ -141,8 +141,8 @@ public class DecreaseProjectHoursBudgetCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
       
         Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Description, Is.Not.Null);
-        Assert.That(result.Error.Description, Does.Contain("hours budget"));
+        Assert.That(result.Error.Message, Is.Not.Null);
+        Assert.That(result.Error.Message, Does.Contain("hours budget"));
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Conflict));
     }
 
@@ -176,8 +176,8 @@ public class DecreaseProjectHoursBudgetCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
       
         Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Description, Is.Not.Null);
-        Assert.That(result.Error.Description, Does.Contain("burned hours"));
+        Assert.That(result.Error.Message, Is.Not.Null);
+        Assert.That(result.Error.Message, Does.Contain("burned hours"));
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Conflict));
     }
 

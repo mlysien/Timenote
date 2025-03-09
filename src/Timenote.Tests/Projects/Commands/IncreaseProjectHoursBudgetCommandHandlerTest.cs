@@ -74,7 +74,7 @@ public class IncreaseProjectHoursBudgetCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
       
         Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Description, Is.Not.Null);
+        Assert.That(result.Error.Message, Is.Not.Null);
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.NotFound));
     }
     
@@ -108,7 +108,7 @@ public class IncreaseProjectHoursBudgetCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(project), Times.Once);
       
         Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Description, Is.Not.Null);
+        Assert.That(result.Error.Message, Is.Not.Null);
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Failure));
     }
 
@@ -141,7 +141,7 @@ public class IncreaseProjectHoursBudgetCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(project), Times.Never);
       
         Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Description, Is.Not.Null);
+        Assert.That(result.Error.Message, Is.Not.Null);
         Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Conflict));
     }
 }
