@@ -95,7 +95,7 @@ public class IncreaseProjectHoursBudgetCommandHandlerTest
         var repositoryMock = new Mock<IProjectRepository>();
 
         repositoryMock.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
-        repositoryMock.Setup(r => r.UpdateAsync(project)).ThrowsAsync(new Exception());
+        repositoryMock.Setup(r => r.UpdateAsync(project)).ThrowsAsync(It.IsAny<Exception>());
         
         var command = new IncreaseProjectHoursBudgetCommand(project.Id, newHoursBudget);
         var handler = new IncreaseProjectHoursBudgetCommandHandler(repositoryMock.Object);

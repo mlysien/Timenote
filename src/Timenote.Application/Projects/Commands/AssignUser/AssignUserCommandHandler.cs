@@ -14,7 +14,6 @@ internal sealed class AssignUserCommandHandler(
     {
         try
         {
-
             if (!await userRepository.ExistsAsync(request.UserId))
             {
                 throw new UserNotFoundException(request.UserId);
