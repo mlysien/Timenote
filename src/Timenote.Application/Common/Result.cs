@@ -23,7 +23,6 @@ public class Result
     protected static Result<TValue> Success<TValue>(TValue value) => new(value, true, Error.None);
     
     public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
-
 }
 
 public class Result<TValue>(TValue? value, bool isSuccess, Error error) : Result(isSuccess, error)
@@ -32,7 +31,6 @@ public class Result<TValue>(TValue? value, bool isSuccess, Error error) : Result
     public TValue Value => IsSuccess
         ? value!
         : throw new InvalidOperationException("The value of a failure result can't be accessed.");
-
     
     public static implicit operator Result<TValue>(TValue? value) =>
         value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
