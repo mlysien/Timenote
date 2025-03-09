@@ -10,7 +10,7 @@ public sealed class Project : EntityBase
 
     public decimal BurnedHours { get; set; }
     
-    public bool IsActive { get; init; }
+    public bool IsActive { get; set; }
     
     public IReadOnlyCollection<Worklog> Worklogs { get; init; }
     
