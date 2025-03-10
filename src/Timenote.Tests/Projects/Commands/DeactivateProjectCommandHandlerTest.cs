@@ -43,4 +43,37 @@ public class DeactivateProjectCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(It.Is<Project>(
             p=>p.IsActive == false)), Times.Once);
     }
+    
+    [Test]
+    public async Task Handle_ShouldReturnFailure_WhenProjectIsAlreadyDeactivated()
+    {
+        // arrange
+        var project = new Project
+        {
+            Id = new Unique(Guid.NewGuid()),
+            Name = "Test Project",
+            Code = "PROJECT.2025",
+            HoursBudget = 2048,
+            BurnedHours = 0,
+            IsActive = false
+        };
+        
+        var repositoryMock = new Mock<IProjectRepository>();
+        repositoryMock.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
+        repositoryMock.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
+        
+        var command = new DeactivateProjectCommand(project.Id);
+        var handler = new DeactivateProjectCommandHandler(repositoryMock.Object);
+    
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+        
+        // assert
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Error.Message, Is.Not.Empty);
+        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Conflict));
+   
+        repositoryMock.Verify(r => r.UpdateAsync(It.Is<Project>(
+            p=>p.IsActive == false)), Times.Never);
+    }
 }

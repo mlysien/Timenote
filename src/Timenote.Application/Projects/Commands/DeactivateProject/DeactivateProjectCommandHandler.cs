@@ -18,6 +18,12 @@ internal sealed class DeactivateProjectCommandHandler(
         }
         
         var project = await projectRepository.GetByIdAsync(request.ProjectId);
+
+        if (project.IsActive is false)
+        {
+            return Result.Failure<Unique>(new Error(ErrorType.Conflict,
+                $"Project with id: {request.ProjectId} has already been deactivated"));
+        }
         
         project.IsActive = false;
         
