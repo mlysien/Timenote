@@ -11,24 +11,31 @@ internal sealed class DeactivateProjectCommandHandler(
 {
     public async Task<Result<Unique>> Handle(DeactivateProjectCommand request, CancellationToken cancellationToken)
     {
-        if (!await projectRepository.ProjectExistsAsync(request.ProjectId))
+        try
         {
-            return Result.Failure<Unique>(new Error(ErrorType.NotFound,
-                $"Project with id: {request.ProjectId} does not exist"));
-        }
+            if (!await projectRepository.ProjectExistsAsync(request.ProjectId))
+            {
+                return Result.Failure<Unique>(new Error(ErrorType.NotFound,
+                    $"Project with id: {request.ProjectId} does not exist"));
+            }
         
-        var project = await projectRepository.GetByIdAsync(request.ProjectId);
+            var project = await projectRepository.GetByIdAsync(request.ProjectId);
 
-        if (project.IsActive is false)
-        {
-            return Result.Failure<Unique>(new Error(ErrorType.Conflict,
-                $"Project with id: {request.ProjectId} has already been deactivated"));
+            if (project.IsActive is false)
+            {
+                return Result.Failure<Unique>(new Error(ErrorType.Conflict,
+                    $"Project with id: {request.ProjectId} has already been deactivated"));
+            }
+        
+            project.IsActive = false;
+        
+            await projectRepository.UpdateAsync(project);
+        
+            return project.Id;
         }
-        
-        project.IsActive = false;
-        
-        await projectRepository.UpdateAsync(project);
-        
-        return project.Id;
+        catch (Exception e)
+        {
+            return Result.Failure<Unique>(new Error(ErrorType.Failure, e.Message));
+        }
     }
 }
