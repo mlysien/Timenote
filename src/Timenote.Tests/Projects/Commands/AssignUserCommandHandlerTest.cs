@@ -1,4 +1,5 @@
 ﻿using Moq;
+using Shouldly;
 using Timenote.Application.Common;
 using Timenote.Application.Projects.Commands.AssignUser;
 using Timenote.Domain.Entities;
@@ -132,9 +133,10 @@ public class AssignUserCommandHandlerTest
         var result = await handler.Handle(command, CancellationToken.None);
         
         // assert
-        Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Failure));
-        Assert.That(result.Error.Message, Is.Not.Empty);
+        result.ShouldNotBeNull();
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Type.ShouldBe(ErrorType.Failure);
+        result.Error.Message.ShouldNotBeEmpty();
         
         projectRepository.Verify(r 
             => r.UpdateAsync(It.Is<Project>(p => p.User == user)), Times.Once);
