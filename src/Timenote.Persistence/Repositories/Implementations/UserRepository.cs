@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Timenote.Domain.Entities;
+using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Context;
 using Timenote.Persistence.Repositories.Abstractions;
 
@@ -15,9 +16,14 @@ internal sealed class UserRepository(DatabaseContext context) : IUserRepository
         return user;
     }
 
-    public async Task<bool> ExistsAsync(Guid userId)
+    public async Task<bool> ExistsAsync(Unique userId)
     {
         return await context.Users.AnyAsync(user => user.Id == userId);
+    }
+
+    public async Task<bool> EmailExistsAsync(string email)
+    {
+        return await context.Users.AnyAsync(user => user.Email == email);
     }
 
     public async Task<User> UpdateAsync(User user)
