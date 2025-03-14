@@ -12,7 +12,7 @@ namespace Timenote.Tests.Projects.Commands;
 public class AssignUserCommandHandlerTest
 {
     [Test]
-    public async Task Handle_ShouldReturnSuccess_WhenUserAndProjectExists()
+    public async Task Handle_ShouldAssignUserToProject_WhenUserAndProjectExists()
     {
         var user = new User()
         {
@@ -46,15 +46,16 @@ public class AssignUserCommandHandlerTest
         var result = await handler.Handle(command, CancellationToken.None);
         
         // assert
-        Assert.That(result.IsSuccess, Is.True);
-        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.None));
-
+        result.ShouldNotBeNull();
+        result.IsSuccess.ShouldBeTrue();
+        result.Error.ShouldBe(Error.None);
+        
         projectRepository.Verify(r 
             => r.UpdateAsync(It.Is<Project>(p => p.User == user)), Times.Once);
     }
     
     [Test]
-    public async Task Handle_ShouldReturnFailure_WhenUserAlreadyAssigned()
+    public async Task Handle_ShouldFailure_WhenUserAlreadyAssigned()
     {
         var user = new User()
         {
@@ -89,15 +90,15 @@ public class AssignUserCommandHandlerTest
         var result = await handler.Handle(command, CancellationToken.None);
         
         // assert
-        Assert.That(result.IsFailure, Is.True);
-        Assert.That(result.Error.Type, Is.EqualTo(ErrorType.Conflict));
-
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Type.ShouldBe(ErrorType.Conflict);
+        
         projectRepository.Verify(r 
             => r.UpdateAsync(It.Is<Project>(p => p.User == user)), Times.Never);
     }
     
     [Test]
-    public async Task Handle_ShouldReturnFailure_WhenRepositoryThrowsException()
+    public async Task Handle_ShouldFailure_WhenRepositoryThrowsException()
     {    
         // arrange
         var user = new User()
