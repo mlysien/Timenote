@@ -3,6 +3,7 @@ using Shouldly;
 using Timenote.Application.Common;
 using Timenote.Application.Users.Commands.CreateUser;
 using Timenote.Domain.Entities;
+using Timenote.Domain.Enums;
 using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Repositories.Abstractions;
 
@@ -38,7 +39,8 @@ public class CreateUserCommandHandlerTest
         repositoryMock.Verify(r => r.EmailExistsAsync(email), Times.Once);
         repositoryMock.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Once);
         repositoryMock.Verify(repo => repo.AddAsync(It.Is<User>(
-            p => p.Name == userName && p.Email == email && p.Password == password)
+            p => p.Name == userName && p.Email == email && p.Password == password
+            && p.Role == UserRole.Unassigned)
         ), Times.Once);
     }
     
