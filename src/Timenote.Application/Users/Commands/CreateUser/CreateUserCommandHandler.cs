@@ -10,23 +10,28 @@ internal sealed class CreateUserCommandHandler(IUserRepository userRepository) :
 {
     public async Task<Result<Unique>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var emailExist = await userRepository.EmailExistsAsync(request.Email);
-
-        if (emailExist)
+        try
         {
-            return Result.Failure<Unique>(Error.Conflict($"Email '{request.Email}' already exists"));
-        }
+            if (await userRepository.EmailExistsAsync(request.Email))
+            {
+                return Result.Failure<Unique>(Error.Conflict($"Email '{request.Email}' already exists"));
+            }
 
-        var user = new User
-        {
-            Id = new Unique(Guid.NewGuid()),
-            Email = request.Email,
-            Name = request.Name,
-            Password = request.Password
-        };
+            var user = new User
+            {
+                Id = new Unique(Guid.NewGuid()),
+                Email = request.Email,
+                Name = request.Name,
+                Password = request.Password
+            };
         
-        await userRepository.AddAsync(user);
+            await userRepository.AddAsync(user);
 
-        return user.Id;
+            return user.Id;
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure<Unique>(Error.Failure(ex.Message));
+        }
     }
 }

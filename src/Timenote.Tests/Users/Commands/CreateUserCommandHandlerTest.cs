@@ -68,4 +68,32 @@ public class CreateUserCommandHandlerTest
         repositoryMock.Verify(r => r.EmailExistsAsync(email), Times.Once);
         repositoryMock.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Never);
     }
+    
+    [Test]
+    public async Task Handle_ShouldFailure_WhenRepositoryThrowsException()
+    {
+        // arrange
+        const string userName = "John Snow";
+        const string email = "john@snow.com";
+        const string password = "snow123!";
+        
+        var repositoryMock = new Mock<IUserRepository>();
+        
+        repositoryMock.Setup(r => r.EmailExistsAsync(email)).ReturnsAsync(false);
+        repositoryMock.Setup(r => r.AddAsync(It.IsAny<User>())).ThrowsAsync(new Exception());
+        
+        var command = new CreateUserCommand(userName, email, password);
+        var handler = new CreateUserCommandHandler(repositoryMock.Object);
+    
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+        
+        // assert
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Type.ShouldBe(ErrorType.Failure);
+        result.Error.Message.ShouldNotBeNullOrEmpty();
+        
+        repositoryMock.Verify(r => r.EmailExistsAsync(email), Times.Once);
+        repositoryMock.Verify(r => r.AddAsync(It.IsAny<User>()), Times.Once);
+    }
 }
