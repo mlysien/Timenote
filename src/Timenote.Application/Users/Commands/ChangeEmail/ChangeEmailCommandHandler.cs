@@ -17,6 +17,11 @@ internal sealed class ChangeEmailCommandHandler(IUserRepository userRepository)
             throw new UserNotFoundException(request.UserId);
         }
 
+        if (user.Email == request.NewEmail)
+        {
+            return Result.Failure(new Error(ErrorType.Conflict, "Cannot change the email because is the same"));
+        }
+
         user.Email = request.NewEmail;
         
         await userRepository.UpdateAsync(user);
