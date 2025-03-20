@@ -10,22 +10,24 @@ internal sealed class ChangeEmailCommandHandler(IUserRepository userRepository)
 {
     public async Task<Result> Handle(ChangeEmailCommand request, CancellationToken cancellationToken)
     {
-        var user = await userRepository.GetByIdAsync(request.UserId);
-
-        if (user is null)
+        try
         {
-            throw new UserNotFoundException(request.UserId);
-        }
+            var user = await userRepository.GetByIdAsync(request.UserId);
 
-        if (user.Email == request.NewEmail)
+            if (user.Email == request.NewEmail)
+            {
+                return Result.Failure(new Error(ErrorType.Conflict, "Cannot change the email because is the same"));
+            }
+
+            user.Email = request.NewEmail;
+
+            await userRepository.UpdateAsync(user);
+
+            return Result.Success();
+        }
+        catch (UserNotFoundException e)
         {
-            return Result.Failure(new Error(ErrorType.Conflict, "Cannot change the email because is the same"));
+            return Result.Failure(new Error(ErrorType.NotFound, e.Message));
         }
-
-        user.Email = request.NewEmail;
-        
-        await userRepository.UpdateAsync(user);
-        
-        return Result.Success();
     }
 }

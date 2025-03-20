@@ -4,6 +4,7 @@ using Timenote.Application.Common;
 using Timenote.Application.Users.Commands.ChangeEmail;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Enums;
+using Timenote.Domain.Exceptions;
 using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Repositories.Abstractions;
 
@@ -68,6 +69,36 @@ public class ChangeEmailCommandHandlerTest
         // assert
         result.IsFailure.ShouldBeTrue();
         result.Error.Type.ShouldBe(ErrorType.Conflict);
+        result.Error.Message.ShouldNotBeEmpty();
+        
+        repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Once);
+        repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
+        repositoryMock.VerifyNoOtherCalls();
+    }
+    
+    [Test]
+    public async Task Handle_ShouldFailure_WhenUserNotExist()
+    {
+        // arrange
+        const string newEmail = "john.snow@timenote.com";
+        var repositoryMock = new Mock<IUserRepository>();
+        var user = new User
+        {
+            Id = new Unique(Guid.NewGuid()),
+            Email = "john.snow@timenote.com"
+        };
+
+        repositoryMock.Setup(r => r.GetByIdAsync(user.Id)).ThrowsAsync(new UserNotFoundException(user.Id));
+
+        var command = new ChangeEmailCommand(user.Id, newEmail);
+        var handler = new ChangeEmailCommandHandler(repositoryMock.Object);
+
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        // assert
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Type.ShouldBe(ErrorType.NotFound);
         result.Error.Message.ShouldNotBeEmpty();
         
         repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Once);
