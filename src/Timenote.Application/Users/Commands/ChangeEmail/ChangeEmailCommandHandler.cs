@@ -25,9 +25,13 @@ internal sealed class ChangeEmailCommandHandler(IUserRepository userRepository)
 
             return Result.Success();
         }
-        catch (UserNotFoundException e)
+        catch (UserNotFoundException exception)
         {
-            return Result.Failure(new Error(ErrorType.NotFound, e.Message));
+            return Result.Failure(new Error(ErrorType.NotFound, exception.Message));
+        }
+        catch (Exception exception)
+        {
+            return Result.Failure(new Error(ErrorType.Failure, exception.Message));
         }
     }
 }
