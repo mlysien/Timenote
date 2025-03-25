@@ -11,13 +11,18 @@ internal sealed class ChangePasswordCommandHandler(IUserRepository userRepositor
     {
         try
         {
+            if (request.OldPassword == request.NewPassword)
+            {
+                return Result.Failure(new Error(ErrorType.Conflict, "New password cannot be the same as old password"));
+            }
+            
             var user = await userRepository.GetByIdAsync(request.UserId);
 
             if (user.Password != request.OldPassword)
             {
                 return Result.Failure(new Error(ErrorType.Conflict, "Old passwords do not match"));
             }
-
+            
             user.Password = request.NewPassword;
 
             await userRepository.UpdateAsync(user);
