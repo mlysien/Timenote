@@ -112,4 +112,38 @@ public class ChangePasswordCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
         repositoryMock.VerifyNoOtherCalls();
     }
+    
+    [Test]
+    public async Task Handle_ShouldFailure_WhenRepositoryThrowsException()
+    {
+        // arrange
+        const string newPassword = "newPassword!2#";
+        var repositoryMock = new Mock<IUserRepository>();
+        var user = new User
+        {
+            Id = new Unique(Guid.NewGuid()),
+            Email = "test@test.com",
+            Password = "oldPassword!2#",
+            Name = "John Snow",
+            Role = UserRole.Unassigned
+        };
+
+        repositoryMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
+        repositoryMock.Setup(r => r.UpdateAsync(It.IsAny<User>())).ThrowsAsync(new Exception());
+        
+        var command = new ChangePasswordCommand(user.Id, user.Password, newPassword);
+        var handler = new ChangePasswordCommandHandler(repositoryMock.Object);
+
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        // assert
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Type.ShouldBe(ErrorType.Failure);
+        result.Error.Message.ShouldNotBeEmpty();
+        
+        repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Once);
+        repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Once);
+        repositoryMock.VerifyNoOtherCalls();
+    }
 }
