@@ -29,7 +29,8 @@ public class ChangeEmailCommandHandlerTest
         };
 
         repositoryMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
-
+        repositoryMock.Setup(r => r.EmailExistsAsync(newEmail)).ReturnsAsync(false);
+        
         var command = new ChangeEmailCommand(user.Id, newEmail);
         var handler = new ChangeEmailCommandHandler(repositoryMock.Object);
 
@@ -41,6 +42,7 @@ public class ChangeEmailCommandHandlerTest
         result.Error.Type.ShouldBe(ErrorType.None);
         
         repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Once);
+        repositoryMock.Verify(r => r.EmailExistsAsync(newEmail), Times.Once);
         repositoryMock.Verify(r => r.UpdateAsync(
             It.Is<User>(u => u.Id == user.Id && u.Email == newEmail)), Times.Once);
         repositoryMock.VerifyNoOtherCalls();
@@ -59,7 +61,8 @@ public class ChangeEmailCommandHandlerTest
         };
 
         repositoryMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
-
+        repositoryMock.Setup(r => r.EmailExistsAsync(newEmail)).ReturnsAsync(false);
+        
         var command = new ChangeEmailCommand(user.Id, newEmail);
         var handler = new ChangeEmailCommandHandler(repositoryMock.Object);
 
@@ -72,6 +75,39 @@ public class ChangeEmailCommandHandlerTest
         result.Error.Message.ShouldNotBeEmpty();
         
         repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Once);
+        repositoryMock.Verify(r => r.EmailExistsAsync(newEmail), Times.Once);
+        repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
+        repositoryMock.VerifyNoOtherCalls();
+    }
+    
+    [Test]
+    public async Task Handle_ShouldFailure_WhenNewEmailAlreadyExists()
+    {
+        // arrange
+        const string newEmail = "tyrion.lannister@timenote.com";
+        var repositoryMock = new Mock<IUserRepository>();
+        var user = new User
+        {
+            Id = new Unique(Guid.NewGuid()),
+            Email = "john.snow@timenote.com"
+        };
+
+        repositoryMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
+        repositoryMock.Setup(r => r.EmailExistsAsync(newEmail)).ReturnsAsync(true);
+        
+        var command = new ChangeEmailCommand(user.Id, newEmail);
+        var handler = new ChangeEmailCommandHandler(repositoryMock.Object);
+
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        // assert
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Type.ShouldBe(ErrorType.Conflict);
+        result.Error.Message.ShouldNotBeEmpty();
+        
+        repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Never);
+        repositoryMock.Verify(r => r.EmailExistsAsync(newEmail), Times.Once);
         repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
         repositoryMock.VerifyNoOtherCalls();
     }
@@ -89,7 +125,8 @@ public class ChangeEmailCommandHandlerTest
         };
 
         repositoryMock.Setup(r => r.GetByIdAsync(user.Id)).ThrowsAsync(new UserNotFoundException(user.Id));
-
+        repositoryMock.Setup(r => r.EmailExistsAsync(newEmail)).ReturnsAsync(false);
+        
         var command = new ChangeEmailCommand(user.Id, newEmail);
         var handler = new ChangeEmailCommandHandler(repositoryMock.Object);
 
@@ -102,6 +139,7 @@ public class ChangeEmailCommandHandlerTest
         result.Error.Message.ShouldNotBeEmpty();
         
         repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Once);
+        repositoryMock.Verify(r => r.EmailExistsAsync(newEmail), Times.Once);
         repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
         repositoryMock.VerifyNoOtherCalls();
     }
@@ -119,6 +157,7 @@ public class ChangeEmailCommandHandlerTest
         };
 
         repositoryMock.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
+        repositoryMock.Setup(r => r.EmailExistsAsync(newEmail)).ReturnsAsync(false);
         repositoryMock.Setup(r => r.UpdateAsync(It.Is<User>(x => x.Email == newEmail)))
             .ThrowsAsync(new Exception());
         
@@ -134,6 +173,7 @@ public class ChangeEmailCommandHandlerTest
         result.Error.Message.ShouldNotBeEmpty();
         
         repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Once);
+        repositoryMock.Verify(r => r.EmailExistsAsync(newEmail), Times.Once);
         repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Once);
         repositoryMock.VerifyNoOtherCalls();
     }

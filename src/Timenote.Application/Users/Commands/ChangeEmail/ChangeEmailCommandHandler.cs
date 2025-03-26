@@ -12,12 +12,19 @@ internal sealed class ChangeEmailCommandHandler(IUserRepository userRepository)
     {
         try
         {
+            if (await userRepository.EmailExistsAsync(request.NewEmail))
+            {
+                return Result.Failure(new Error(ErrorType.Conflict, $"Email {request.NewEmail} already taken"));
+            }
+            
             var user = await userRepository.GetByIdAsync(request.UserId);
-
+            
             if (user.Email == request.NewEmail)
             {
                 return Result.Failure(new Error(ErrorType.Conflict, "Cannot change the email because is the same"));
             }
+            
+            
 
             user.Email = request.NewEmail;
 
