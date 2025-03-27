@@ -6,7 +6,6 @@ and teams to efficiently log, manage, and analyze work hours. It allows users
 to track time manually, assign entries to projects and generate detailed reports 
 for productivity analysis. The platform is built using C# with ASP.NET Core and TDD approach.
 
-
 # Core Features
 - Manual time entry logging
 - Editing and deleting time entries
