@@ -13,6 +13,7 @@ for productivity analysis. The platform is built using C# with ASP.NET Core and 
 - Ability to add a description to entries
 - Assigning time entries to projects
 
+
 # Project Management
 - Creating projects
 - Editing and deleting projects
