@@ -12,6 +12,11 @@ internal sealed class ChangeRoleCommandHandler(IUserRepository userRepository) :
         try
         {
             var user = await userRepository.GetByIdAsync(request.UserId);
+
+            if (user.Role == request.NewRole)
+            {
+                return Result.Failure(new Error(ErrorType.Conflict, "New role cannot be the same as previous"));
+            }
             
             user.Role = request.NewRole;
 
