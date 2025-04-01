@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Domain", "Timenote.Domain\Timenote.Domain.csproj", "{DDBA7F95-3EDD-49A0-9F73-416BF4D5CB29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Domain", "src\Timenote.Domain\Timenote.Domain.csproj", "{DDBA7F95-3EDD-49A0-9F73-416BF4D5CB29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Tests", "Timenote.Tests\Timenote.Tests.csproj", "{6834EA00-31D7-4DEC-A77D-C8CFF809AD32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Tests", "src\Timenote.Tests\Timenote.Tests.csproj", "{6834EA00-31D7-4DEC-A77D-C8CFF809AD32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Persistence", "Timenote.Persistence\Timenote.Persistence.csproj", "{81FF8610-8A4F-4690-AA86-F3AF19F9723B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Persistence", "src\Timenote.Persistence\Timenote.Persistence.csproj", "{81FF8610-8A4F-4690-AA86-F3AF19F9723B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Api", "Timenote.Api\Timenote.Api.csproj", "{01216F91-1C8A-49D7-9C17-DFFFF4236870}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Api", "src\Timenote.Api\Timenote.Api.csproj", "{01216F91-1C8A-49D7-9C17-DFFFF4236870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Application", "Timenote.Application\Timenote.Application.csproj", "{3DF9C7C5-727D-4F08-87F3-2252B101C374}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timenote.Application", "src\Timenote.Application\Timenote.Application.csproj", "{3DF9C7C5-727D-4F08-87F3-2252B101C374}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
