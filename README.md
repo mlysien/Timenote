@@ -23,6 +23,7 @@ for productivity analysis. The platform is built using C# with ASP.NET Core and 
 - Exporting reports (CSV, PDF, Excel)
 - Report filters (e.g., date, user, project)
 
+
 # User Management & Permissions
 - Role and permission system (admin, user, manager)
 - Guest access with limited permissions (e.g., for clients)
