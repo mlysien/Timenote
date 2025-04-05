@@ -4,6 +4,7 @@ using Timenote.Application.Common;
 using Timenote.Application.Users.Commands.ChangeRole;
 using Timenote.Domain.Entities;
 using Timenote.Domain.Enums;
+using Timenote.Domain.Exceptions;
 using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Repositories.Abstractions;
 
@@ -77,4 +78,38 @@ public class ChangeRoleCommandHandlerTest
         repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
         repositoryMock.VerifyNoOtherCalls();
     }
+    
+    [Test]
+    public async Task Handle_ShouldFailure_WhenUserDoesNotExist()
+    {
+        // arrange
+        const UserRole newRole = UserRole.Employee;
+        var repositoryMock = new Mock<IUserRepository>();
+        var user = new User
+        {
+            Id = new Unique(Guid.NewGuid()),
+            Email = "test@test.com",
+            Password = "oldPassword!2#",
+            Name = "John Snow",
+            Role = UserRole.Unassigned
+        };
+
+        repositoryMock.Setup(r => r.GetByIdAsync(user.Id)).ThrowsAsync(new UserNotFoundException(user.Id));
+        
+        var command = new ChangeRoleCommand(user.Id, newRole);
+        var handler = new ChangeRoleCommandHandler(repositoryMock.Object);
+
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        // assert
+        result.IsFailure.ShouldBeTrue();
+        result.Error.Type.ShouldBe(ErrorType.NotFound);
+        result.Error.Message.ShouldNotBeEmpty();
+        
+        repositoryMock.Verify(r => r.GetByIdAsync(user.Id), Times.Once);
+        repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<User>()), Times.Never);
+        repositoryMock.VerifyNoOtherCalls();
+    }
+
 }
