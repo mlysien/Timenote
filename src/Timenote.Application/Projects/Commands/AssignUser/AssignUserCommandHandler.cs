@@ -19,7 +19,7 @@ internal sealed class AssignUserCommandHandler(
                 throw new UserNotFoundException(request.UserId);
             }
 
-            if (!await projectRepository.ProjectExistsAsync(request.ProjectId))
+            if (!await projectRepository.ExistsAsync(request.ProjectId))
             {
                 throw new ProjectNotFoundException(request.ProjectId);
             }

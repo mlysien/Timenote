@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Timenote.Domain.Entities;
+using Timenote.Domain.ValueObjects;
 using Timenote.Persistence.Context;
 using Timenote.Persistence.Repositories.Abstractions;
 
@@ -12,7 +13,7 @@ internal sealed class ProjectRepository(DatabaseContext context) : IProjectRepos
         return await context.Projects.FirstAsync(p => p.Id == projectId);
     }
 
-    public async Task<bool> ProjectExistsAsync(Guid projectId)
+    public async Task<bool> ExistsAsync(Unique projectId)
     {
         return await context.Projects.AnyAsync(p => p.Id == projectId);
     }

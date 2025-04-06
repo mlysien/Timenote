@@ -36,7 +36,7 @@ public class AssignUserCommandHandlerTest
         userRepository.Setup(r => r.ExistsAsync(user.Id)).ReturnsAsync(true);
         userRepository.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
         
-        projectRepository.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
+        projectRepository.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
         projectRepository.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
         
         var command = new AssignUserCommand(project.Id, user.Id);
@@ -80,7 +80,7 @@ public class AssignUserCommandHandlerTest
         userRepository.Setup(r => r.ExistsAsync(user.Id)).ReturnsAsync(true);
         userRepository.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
         
-        projectRepository.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
+        projectRepository.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
         projectRepository.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
         
         var command = new AssignUserCommand(project.Id, user.Id);
@@ -122,7 +122,7 @@ public class AssignUserCommandHandlerTest
         userRepository.Setup(r => r.ExistsAsync(user.Id)).ReturnsAsync(true);
         userRepository.Setup(r => r.GetByIdAsync(user.Id)).ReturnsAsync(user);
         
-        projectRepository.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
+        projectRepository.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
         projectRepository.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
         projectRepository.Setup(r => r.UpdateAsync(project)).ThrowsAsync(It.IsAny<Exception>());
         

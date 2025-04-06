@@ -1,4 +1,5 @@
 ﻿using Timenote.Domain.Entities;
+using Timenote.Domain.ValueObjects;
 
 namespace Timenote.Persistence.Repositories.Abstractions;
 
@@ -6,7 +7,7 @@ public interface IProjectRepository
 {
     Task<Project> GetByIdAsync(Guid projectId);
     
-    Task<bool> ProjectExistsAsync(Guid projectId);
+    Task<bool> ExistsAsync(Unique projectId);
     
     Task<bool> CodeExistsAsync(string projectCode);
     

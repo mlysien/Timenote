@@ -13,7 +13,7 @@ internal sealed class DeactivateProjectCommandHandler(
     {
         try
         {
-            if (!await projectRepository.ProjectExistsAsync(request.ProjectId))
+            if (!await projectRepository.ExistsAsync(request.ProjectId))
             {
                 return Result.Failure<Unique>(new Error(ErrorType.NotFound,
                     $"Project with id: {request.ProjectId} does not exist"));

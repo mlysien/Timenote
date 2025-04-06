@@ -25,7 +25,7 @@ public class DeactivateProjectCommandHandlerTest
         };
         
         var repositoryMock = new Mock<IProjectRepository>();
-        repositoryMock.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
+        repositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
         repositoryMock.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
         
         var command = new DeactivateProjectCommand(project.Id);
@@ -59,7 +59,7 @@ public class DeactivateProjectCommandHandlerTest
         };
         
         var repositoryMock = new Mock<IProjectRepository>();
-        repositoryMock.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
+        repositoryMock.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
         repositoryMock.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
         
         var command = new DeactivateProjectCommand(project.Id);
@@ -92,7 +92,7 @@ public class DeactivateProjectCommandHandlerTest
         
         var projectRepository = new Mock<IProjectRepository>();
         
-        projectRepository.Setup(r => r.ProjectExistsAsync(project.Id)).ReturnsAsync(true);
+        projectRepository.Setup(r => r.ExistsAsync(project.Id)).ReturnsAsync(true);
         projectRepository.Setup(r => r.GetByIdAsync(project.Id)).ReturnsAsync(project);
         projectRepository.Setup(r => r.UpdateAsync(project)).ThrowsAsync(It.IsAny<Exception>());
         
