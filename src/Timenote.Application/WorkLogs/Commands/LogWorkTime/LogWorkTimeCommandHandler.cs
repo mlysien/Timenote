@@ -18,12 +18,14 @@ public class LogWorkTimeCommandHandler(
         {
             if (!await userRepository.ExistsAsync(request.UserId))
             {
-                return Result.Failure(new Error(ErrorType.NotFound, $"User with Id '{request.UserId}' does not exist"));
+                return Result.Failure(new Error(ErrorType.NotFound, 
+                    $"User with Id '{request.UserId}' does not exist"));
             }
 
             if (!await projectRepository.ExistsAsync(request.ProjectId))
             {
-                return Result.Failure(Error.Conflict($"Project with Id '{request.ProjectId}' does not exist"));
+                return Result.Failure(new Error(ErrorType.NotFound,
+                    $"Project with Id '{request.ProjectId}' does not exist"));
             }
 
             await workLogRepository.AddAsync(new WorkTimeEntry()
