@@ -1,5 +1,6 @@
 ![timenote](assets/timenote.logo.png)
 
+
 # Timenote
 Timenote is an open-source time tracking platform designed for individuals 
 and teams to efficiently log, manage, and analyze work hours. It allows users 
