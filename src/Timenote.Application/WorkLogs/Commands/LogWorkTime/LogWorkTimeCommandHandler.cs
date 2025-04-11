@@ -16,6 +16,11 @@ public class LogWorkTimeCommandHandler(
     {
         try
         {
+            if (request.StartTime > request.EndTime)
+            {
+                return Result.Failure(new Error(ErrorType.Conflict, "Start time cannot be greater than end time"));
+            }
+            
             if (!await userRepository.ExistsAsync(request.UserId))
             {
                 return Result.Failure(new Error(ErrorType.NotFound, 

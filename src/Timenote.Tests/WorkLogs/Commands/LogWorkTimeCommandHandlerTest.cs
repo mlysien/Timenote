@@ -132,5 +132,45 @@ public class LogWorkTimeCommandHandlerTest
         workLogRepository.Verify(r => r.AddAsync(It.IsAny<WorkTimeEntry>()), Times.Never);
         workLogRepository.VerifyNoOtherCalls();
     }
+    
+    [Test]
+    public async Task Handle_ShouldFailure_WhenLoggedStartTimeIsEarlierThanEndTime()
+    {
+        // arrange
+        var userRepository = new Mock<IUserRepository>();
+        var projectRepository = new Mock<IProjectRepository>();
+        var workLogRepository = new Mock<IWorkLogRepository>();
+
+        var workTimeEntry = new WorkTimeEntry
+        {
+            Id = new Unique(Guid.NewGuid()),
+            UserId = new Unique(Guid.NewGuid()),
+            ProjectId = new Unique(Guid.NewGuid()),
+            StartTime = DateTime.UtcNow.AddHours(1),
+            EndTime = DateTime.UtcNow,
+            Description = "Worked on project"
+        };
+
+        userRepository.Setup(r => r.ExistsAsync(workTimeEntry.UserId)).ReturnsAsync(true);
+        projectRepository.Setup(r => r.ExistsAsync(workTimeEntry.ProjectId)).ReturnsAsync(true);
+
+        var command = new LogWorkTimeCommand(workTimeEntry.UserId, workTimeEntry.ProjectId,
+            workTimeEntry.StartTime, workTimeEntry.EndTime, workTimeEntry.Description);
+
+        var handler =
+            new LogWorkTimeCommandHandler(workLogRepository.Object, userRepository.Object, projectRepository.Object);
+
+        // act
+        var result = await handler.Handle(command, CancellationToken.None);
+
+        // assert
+        result.IsSuccess.ShouldBeFalse();
+        result.Error.Type.ShouldBe(ErrorType.Conflict);
+
+        userRepository.Verify(r => r.ExistsAsync(workTimeEntry.UserId), Times.Never);
+        projectRepository.Verify(r => r.ExistsAsync(workTimeEntry.ProjectId), Times.Never);
+        workLogRepository.Verify(r => r.AddAsync(It.IsAny<WorkTimeEntry>()), Times.Never);
+        workLogRepository.VerifyNoOtherCalls();
+    }
 }
 
