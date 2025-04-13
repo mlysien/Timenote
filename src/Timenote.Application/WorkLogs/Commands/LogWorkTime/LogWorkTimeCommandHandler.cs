@@ -16,6 +16,11 @@ public class LogWorkTimeCommandHandler(
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(request.Description))
+            {
+                return Result.Failure(new Error(ErrorType.Conflict, "Description cannot be empty"));
+            }
+            
             if (request.StartTime > request.EndTime)
             {
                 return Result.Failure(new Error(ErrorType.Conflict, "Start time cannot be greater than end time"));
