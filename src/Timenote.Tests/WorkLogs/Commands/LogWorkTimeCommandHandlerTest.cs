@@ -44,6 +44,7 @@ public class LogWorkTimeCommandHandlerTest
         // assert
         result.IsSuccess.ShouldBeTrue();
         result.Error.Type.ShouldBe(ErrorType.None);
+        result.Error.Message.ShouldBeEmpty();
 
         userRepository.Verify(r => r.ExistsAsync(workTimeEntry.UserId), Times.Once);
         projectRepository.Verify(r => r.ExistsAsync(workTimeEntry.ProjectId), Times.Once);
@@ -86,6 +87,7 @@ public class LogWorkTimeCommandHandlerTest
         // assert
         result.IsSuccess.ShouldBeFalse();
         result.Error.Type.ShouldBe(ErrorType.NotFound);
+        result.Error.Message.ShouldNotBeEmpty();
 
         userRepository.Verify(r => r.ExistsAsync(workTimeEntry.UserId), Times.Once);
         projectRepository.Verify(r => r.ExistsAsync(workTimeEntry.ProjectId), Times.Never);
@@ -126,6 +128,7 @@ public class LogWorkTimeCommandHandlerTest
         // assert
         result.IsSuccess.ShouldBeFalse();
         result.Error.Type.ShouldBe(ErrorType.NotFound);
+        result.Error.Message.ShouldNotBeEmpty();
 
         userRepository.Verify(r => r.ExistsAsync(workTimeEntry.UserId), Times.Once);
         projectRepository.Verify(r => r.ExistsAsync(workTimeEntry.ProjectId), Times.Once);
@@ -166,7 +169,8 @@ public class LogWorkTimeCommandHandlerTest
         // assert
         result.IsSuccess.ShouldBeFalse();
         result.Error.Type.ShouldBe(ErrorType.Conflict);
-
+        result.Error.Message.ShouldNotBeEmpty();
+        
         userRepository.Verify(r => r.ExistsAsync(workTimeEntry.UserId), Times.Never);
         projectRepository.Verify(r => r.ExistsAsync(workTimeEntry.ProjectId), Times.Never);
         workLogRepository.Verify(r => r.AddAsync(It.IsAny<WorkTimeEntry>()), Times.Never);
@@ -206,6 +210,7 @@ public class LogWorkTimeCommandHandlerTest
         // assert
         result.IsSuccess.ShouldBeFalse();
         result.Error.Type.ShouldBe(ErrorType.Conflict);
+        result.Error.Message.ShouldNotBeEmpty();
 
         userRepository.Verify(r => r.ExistsAsync(workTimeEntry.UserId), Times.Never);
         projectRepository.Verify(r => r.ExistsAsync(workTimeEntry.ProjectId), Times.Never);
@@ -247,6 +252,7 @@ public class LogWorkTimeCommandHandlerTest
         // assert
         result.IsSuccess.ShouldBeFalse();
         result.Error.Type.ShouldBe(ErrorType.Conflict);
+        result.Error.Message.ShouldNotBeEmpty();
 
         userRepository.Verify(r => r.ExistsAsync(workTimeEntry.UserId), Times.Never);
         projectRepository.Verify(r => r.ExistsAsync(workTimeEntry.ProjectId), Times.Never);

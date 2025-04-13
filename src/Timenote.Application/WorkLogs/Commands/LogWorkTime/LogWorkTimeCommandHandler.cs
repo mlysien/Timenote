@@ -29,13 +29,13 @@ public class LogWorkTimeCommandHandler(
             if (!await userRepository.ExistsAsync(request.UserId))
             {
                 return Result.Failure(new Error(ErrorType.NotFound, 
-                    $"User with Id '{request.UserId}' does not exist"));
+                    $"User with Id '{request.UserId}' not found"));
             }
 
             if (!await projectRepository.ExistsAsync(request.ProjectId))
             {
                 return Result.Failure(new Error(ErrorType.NotFound,
-                    $"Project with Id '{request.ProjectId}' does not exist"));
+                    $"Project with Id '{request.ProjectId}' not found"));
             }
 
             await workLogRepository.AddAsync(new WorkTimeEntry()
